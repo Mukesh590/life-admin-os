@@ -1,0 +1,225 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e4]: A
+    - generic [ref=e5]: d
+    - generic [ref=e6]: m
+    - generic [ref=e7]: i
+    - generic [ref=e8]: "n"
+    - generic [ref=e9]: O
+    - generic [ref=e10]: S
+  - generic [ref=e13]:
+    - navigation [ref=e14]:
+      - generic [ref=e15]:
+        - generic [ref=e16]:
+          - img [ref=e18]
+          - generic [ref=e26]: AdminOS
+        - generic [ref=e27]:
+          - link "[01] Features" [ref=e28]:
+            - /url: "#features"
+            - generic [ref=e29]: "[01]"
+            - text: Features
+          - link "[02] Intelligence" [ref=e30]:
+            - /url: "#intelligence"
+            - generic [ref=e31]: "[02]"
+            - text: Intelligence
+          - link "[03] Pricing" [ref=e32]:
+            - /url: "#pricing"
+            - generic [ref=e33]: "[03]"
+            - text: Pricing
+        - generic [ref=e34]:
+          - link "Sign in" [ref=e35]:
+            - /url: /login
+          - link "Get started" [ref=e36]:
+            - /url: /signup
+    - generic [ref=e37]:
+      - generic [ref=e40]:
+        - generic [ref=e41]:
+          - img [ref=e42]
+          - generic [ref=e45]: "[00]"
+          - text: Powered by Claude AI
+        - heading "Your life. Finally organized." [level=1] [ref=e46]:
+          - generic [ref=e48]:
+            - generic [ref=e49]: Your
+            - generic [ref=e50]: life.
+          - generic [ref=e51]:
+            - generic [ref=e53]: Finally
+            - generic [ref=e54]: organized.
+        - paragraph [ref=e55]:
+          - generic [ref=e56]: Replace
+          - generic [ref=e57]: the
+          - generic [ref=e58]: "20"
+          - generic [ref=e59]: fragmented
+          - generic [ref=e60]: apps
+          - generic [ref=e61]: you
+          - generic [ref=e62]: use
+          - generic [ref=e63]: to
+          - generic [ref=e64]: manage
+          - generic [ref=e65]: life
+          - generic [ref=e66]: admin.
+          - generic [ref=e67]: One
+          - generic [ref=e68]: intelligent
+          - generic [ref=e69]: system
+          - generic [ref=e70]: that
+          - generic [ref=e71]: remembers,
+          - generic [ref=e72]: reminds,
+          - generic [ref=e73]: and
+          - generic [ref=e74]: acts.
+        - generic [ref=e75]:
+          - link "Start for free" [ref=e76]:
+            - /url: /signup
+            - text: Start for free
+            - img [ref=e77]
+          - link "Sign in" [ref=e79]:
+            - /url: /login
+        - paragraph [ref=e80]: Free forever. No credit card required.
+      - generic [ref=e82]: scroll
+    - generic [ref=e86]:
+      - generic [ref=e87]:
+        - generic [ref=e89]: 20+
+        - generic [ref=e90]: Apps replaced
+      - generic [ref=e91]:
+        - generic [ref=e93]: 47min
+        - generic [ref=e94]: Saved per week
+      - generic [ref=e95]:
+        - generic [ref=e97]: 100%
+        - generic [ref=e98]: Data encrypted
+      - generic [ref=e99]:
+        - generic [ref=e100]: $0
+        - generic [ref=e101]: Cost forever
+    - generic [ref=e103]:
+      - generic [ref=e104]:
+        - generic [ref=e105]: "[01] Features"
+        - heading "Everything in one place" [level=2] [ref=e106]
+        - paragraph [ref=e107]: Stop hunting across apps. Life Admin OS connects all your important admin in one intelligent system.
+      - generic [ref=e108]:
+        - generic [ref=e109]:
+          - img [ref=e111]
+          - heading "Subscriptions" [level=3] [ref=e113]
+          - paragraph [ref=e114]: Track every subscription, see what renews next, calculate monthly and annual costs. Never get surprised again.
+        - generic [ref=e115]:
+          - img [ref=e117]
+          - heading "Deadlines" [level=3] [ref=e119]
+          - paragraph [ref=e120]: Tax deadlines, license renewals, school applications. Priority-coded, calendar-integrated, always visible.
+        - generic [ref=e121]:
+          - img [ref=e123]
+          - heading "Documents + AI" [level=3] [ref=e126]
+          - paragraph [ref=e127]: Upload any receipt, bill, or insurance card. AI extracts dates, amounts, vendors automatically.
+        - generic [ref=e128]:
+          - img [ref=e130]
+          - heading "Bills" [level=3] [ref=e132]
+          - paragraph [ref=e133]: Track recurring bills, mark as paid, spot overdue payments. Monthly spending at a glance.
+        - generic [ref=e134]:
+          - img [ref=e136]
+          - heading "Appointments" [level=3] [ref=e139]
+          - paragraph [ref=e140]: Doctor, dentist, DMV, meetings. Chronological view with reminders so you never miss one.
+        - generic [ref=e141]:
+          - img [ref=e143]
+          - heading "Warranties" [level=3] [ref=e147]
+          - paragraph [ref=e148]: Log every product warranty with expiry dates. Get alerted before coverage lapses.
+    - generic [ref=e151]:
+      - generic [ref=e152]:
+        - generic [ref=e153]: "[02] Intelligence"
+        - heading "Upload a doc. AI does the rest." [level=2] [ref=e154]:
+          - text: Upload a doc.
+          - text: AI does the rest.
+        - paragraph [ref=e155]: Take a photo of any receipt, insurance card, warranty card, or bill. Claude AI automatically extracts the vendor, amount, dates, and categorizes it correctly. Review and save in seconds.
+        - generic [ref=e156]:
+          - generic [ref=e157]:
+            - img [ref=e159]
+            - generic [ref=e162]: Extracts vendor name, amount, and key dates
+          - generic [ref=e163]:
+            - img [ref=e165]
+            - generic [ref=e168]: Detects document type automatically
+          - generic [ref=e169]:
+            - img [ref=e171]
+            - generic [ref=e174]: Routes to the right module
+          - generic [ref=e175]:
+            - img [ref=e177]
+            - generic [ref=e180]: Confidence score so you know what to double-check
+      - generic [ref=e181]:
+        - generic [ref=e182]:
+          - img [ref=e184]
+          - generic [ref=e192]: AI Document Extraction
+          - generic [ref=e193]: Processing
+        - generic [ref=e194]:
+          - generic [ref=e195]: UPLOADED DOCUMENT
+          - generic [ref=e197]: insurance_card.jpg
+        - generic [ref=e198]:
+          - generic [ref=e199]:
+            - generic [ref=e200]: Document type
+            - generic [ref=e201]: Insurance Card
+          - generic [ref=e202]:
+            - generic [ref=e203]: Provider
+            - generic [ref=e204]: Blue Cross Blue Shield
+          - generic [ref=e205]:
+            - generic [ref=e206]: Expiry date
+            - generic [ref=e207]: Dec 31, 2025
+          - generic [ref=e208]:
+            - generic [ref=e209]: Coverage
+            - generic [ref=e210]: Family PPO Plan
+          - generic [ref=e211]:
+            - generic [ref=e212]: Confidence
+            - generic [ref=e213]: 97%
+        - button "Save to Documents" [ref=e214]
+    - generic [ref=e217]:
+      - generic [ref=e218]: "[03] Security"
+      - img [ref=e220]
+      - heading "Your data stays yours" [level=2] [ref=e222]
+      - paragraph [ref=e223]: Row-level security on every database table. Encrypted at rest. No bank account numbers, card numbers, or SSNs collected. This is a personal tool, not a financial service.
+      - generic [ref=e224]:
+        - generic [ref=e225]:
+          - img [ref=e226]
+          - generic [ref=e229]: End-to-end encryption
+          - generic [ref=e230]: All data encrypted at rest via Supabase
+        - generic [ref=e231]:
+          - img [ref=e232]
+          - generic [ref=e234]: Row-level security
+          - generic [ref=e235]: You only see your own data, always
+        - generic [ref=e236]:
+          - img [ref=e237]
+          - generic [ref=e240]: No data selling
+          - generic [ref=e241]: Your data is never sold or shared
+    - generic [ref=e243]:
+      - generic [ref=e244]: "[04] Pricing"
+      - heading "Simple pricing" [level=2] [ref=e245]
+      - paragraph [ref=e246]: No subscriptions. No tiers. No catch.
+      - generic [ref=e247]:
+        - generic [ref=e248]:
+          - generic [ref=e249]: $0
+          - generic [ref=e250]: / forever
+        - generic [ref=e251]: For real. No credit card. No catch.
+        - generic [ref=e252]:
+          - generic [ref=e253]:
+            - img [ref=e255]
+            - generic [ref=e258]: All features included
+          - generic [ref=e259]:
+            - img [ref=e261]
+            - generic [ref=e264]: Unlimited entries
+          - generic [ref=e265]:
+            - img [ref=e267]
+            - generic [ref=e270]: AI document extraction
+          - generic [ref=e271]:
+            - img [ref=e273]
+            - generic [ref=e276]: Supabase secure storage
+          - generic [ref=e277]:
+            - img [ref=e279]
+            - generic [ref=e282]: Export your data anytime
+        - link "Get started free" [ref=e283]:
+          - /url: /signup
+          - text: Get started free
+          - img [ref=e284]
+      - paragraph [ref=e286]:
+        - text: This is a personal project. See
+        - link "privacy policy" [ref=e287]:
+          - /url: /privacy
+        - text: for details.
+    - contentinfo [ref=e288]:
+      - generic [ref=e289]:
+        - generic [ref=e290]:
+          - img [ref=e292]
+          - generic [ref=e300]: AdminOS
+        - generic [ref=e301]:
+          - link "Privacy" [ref=e302]:
+            - /url: /privacy
+          - generic [ref=e303]: Built with Next.js + Supabase
+          - generic [ref=e304]: mukesen0204@gmail.com
