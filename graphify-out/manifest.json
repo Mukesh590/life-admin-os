@@ -1,0 +1,342 @@
+{
+  "C:\\Users\\mukes\\projects\\life-admin-os\\.claude\\settings.local.json": {
+    "mtime": 1780890038.3760083,
+    "ast_hash": "322100e7339e3b017e95d72d771089dc",
+    "semantic_hash": "322100e7339e3b017e95d72d771089dc"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\.eslintrc.json": {
+    "mtime": 1780108237.0374026,
+    "ast_hash": "5cc89077d438e3d0d0a8308ab7e06a5a",
+    "semantic_hash": "5cc89077d438e3d0d0a8308ab7e06a5a"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\components.json": {
+    "mtime": 1780108416.084455,
+    "ast_hash": "d37c9d6701bafb02675152df323b964c",
+    "semantic_hash": "d37c9d6701bafb02675152df323b964c"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\next.config.mjs": {
+    "mtime": 1780166250.421864,
+    "ast_hash": "21958f5752add43cc47ab0ff5172cd46",
+    "semantic_hash": "21958f5752add43cc47ab0ff5172cd46"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\package.json": {
+    "mtime": 1780166267.712417,
+    "ast_hash": "f5bd29e351334042b25d0043cbea6655",
+    "semantic_hash": "f5bd29e351334042b25d0043cbea6655"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\postcss.config.mjs": {
+    "mtime": 1780108237.1124775,
+    "ast_hash": "b7941c02b947e17ae32f67ae7e664ec8",
+    "semantic_hash": "b7941c02b947e17ae32f67ae7e664ec8"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\app\\(auth)\\layout.tsx": {
+    "mtime": 1780165228.2846859,
+    "ast_hash": "bbcc7ff85c3cdcba9f5294c0a7c54960",
+    "semantic_hash": "bbcc7ff85c3cdcba9f5294c0a7c54960"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\app\\(auth)\\login\\page.tsx": {
+    "mtime": 1780108658.9429529,
+    "ast_hash": "cc4a47ce8b215b9e2d87c53a85f174df",
+    "semantic_hash": "cc4a47ce8b215b9e2d87c53a85f174df"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\app\\(auth)\\reset-password\\page.tsx": {
+    "mtime": 1780108691.2649534,
+    "ast_hash": "60cc99e13ff928cb925ce31e2f2d80b6",
+    "semantic_hash": "60cc99e13ff928cb925ce31e2f2d80b6"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\app\\(auth)\\signup\\page.tsx": {
+    "mtime": 1780108679.2868602,
+    "ast_hash": "7ac570c0f161561576aa4455284e3367",
+    "semantic_hash": "7ac570c0f161561576aa4455284e3367"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\app\\(dashboard)\\appointments\\AppointmentsClient.tsx": {
+    "mtime": 1780888571.5737352,
+    "ast_hash": "aa4c52a3d653a0db84deeb7ab17fa503",
+    "semantic_hash": "aa4c52a3d653a0db84deeb7ab17fa503"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\app\\(dashboard)\\appointments\\page.tsx": {
+    "mtime": 1780109083.1740804,
+    "ast_hash": "802685c98c7ce992b303879ea29411ce",
+    "semantic_hash": "802685c98c7ce992b303879ea29411ce"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\app\\(dashboard)\\bills\\BillsClient.tsx": {
+    "mtime": 1780888476.8363419,
+    "ast_hash": "ecec60f217d4e9bf14554ade07ec4d78",
+    "semantic_hash": "ecec60f217d4e9bf14554ade07ec4d78"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\app\\(dashboard)\\bills\\page.tsx": {
+    "mtime": 1780109037.5351963,
+    "ast_hash": "c4b37cc82af070e3801de50c761045d4",
+    "semantic_hash": "c4b37cc82af070e3801de50c761045d4"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\app\\(dashboard)\\dashboard\\DashboardClient.tsx": {
+    "mtime": 1780888316.144625,
+    "ast_hash": "4669c610b7577d25fa5467f9710585a6",
+    "semantic_hash": "4669c610b7577d25fa5467f9710585a6"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\app\\(dashboard)\\dashboard\\page.tsx": {
+    "mtime": 1780108722.9264536,
+    "ast_hash": "915631be3c4f341506e55d70ceed3bd4",
+    "semantic_hash": "915631be3c4f341506e55d70ceed3bd4"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\app\\(dashboard)\\deadlines\\DeadlinesClient.tsx": {
+    "mtime": 1780888427.2986543,
+    "ast_hash": "6f60d3fc3930cfbef71b5478e3ef505d",
+    "semantic_hash": "6f60d3fc3930cfbef71b5478e3ef505d"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\app\\(dashboard)\\deadlines\\page.tsx": {
+    "mtime": 1780108841.7354908,
+    "ast_hash": "98ae2a5a5915b2b98e2458a88c38e93e",
+    "semantic_hash": "98ae2a5a5915b2b98e2458a88c38e93e"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\app\\(dashboard)\\documents\\DocumentsClient.tsx": {
+    "mtime": 1780888531.107834,
+    "ast_hash": "4847cb801b89c47fe074941b2e6ca5bc",
+    "semantic_hash": "4847cb801b89c47fe074941b2e6ca5bc"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\app\\(dashboard)\\documents\\page.tsx": {
+    "mtime": 1780108891.6071799,
+    "ast_hash": "f861640fede36d37126b9eafa6dde6f5",
+    "semantic_hash": "f861640fede36d37126b9eafa6dde6f5"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\app\\(dashboard)\\layout.tsx": {
+    "mtime": 1780888217.3599968,
+    "ast_hash": "4c537116c25073bb030e2493c6fb4ca1",
+    "semantic_hash": "4c537116c25073bb030e2493c6fb4ca1"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\app\\(dashboard)\\settings\\SettingsClient.tsx": {
+    "mtime": 1780109448.706133,
+    "ast_hash": "fc17d240b405ebe291dc8dfc1ed7042c",
+    "semantic_hash": "fc17d240b405ebe291dc8dfc1ed7042c"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\app\\(dashboard)\\settings\\page.tsx": {
+    "mtime": 1780109159.3330722,
+    "ast_hash": "39b2ea28c38f78128a5ea7dbe1c6fcd9",
+    "semantic_hash": "39b2ea28c38f78128a5ea7dbe1c6fcd9"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\app\\(dashboard)\\subscriptions\\SubscriptionsClient.tsx": {
+    "mtime": 1780888374.869634,
+    "ast_hash": "0ab88958427e132bc3b9ce0740f36d90",
+    "semantic_hash": "0ab88958427e132bc3b9ce0740f36d90"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\app\\(dashboard)\\subscriptions\\page.tsx": {
+    "mtime": 1780108784.9637609,
+    "ast_hash": "e4d37a6c467e90cc54a6ad572b9db9ba",
+    "semantic_hash": "e4d37a6c467e90cc54a6ad572b9db9ba"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\app\\(dashboard)\\warranties\\WarrantiesClient.tsx": {
+    "mtime": 1780888613.0399458,
+    "ast_hash": "341abf9c7e8862a1bac3f87a079b4bae",
+    "semantic_hash": "341abf9c7e8862a1bac3f87a079b4bae"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\app\\(dashboard)\\warranties\\page.tsx": {
+    "mtime": 1780109121.667317,
+    "ast_hash": "508cc6f8b2f7dd21e3786cdb496dfd6f",
+    "semantic_hash": "508cc6f8b2f7dd21e3786cdb496dfd6f"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\app\\api\\extract\\route.ts": {
+    "mtime": 1780115327.9247022,
+    "ast_hash": "71d5231408483ca210d43edd21fc5fee",
+    "semantic_hash": "71d5231408483ca210d43edd21fc5fee"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\app\\auth\\callback\\route.ts": {
+    "mtime": 1780109213.799321,
+    "ast_hash": "5f66ae37de66497dea1de4be06e0bb7d",
+    "semantic_hash": "5f66ae37de66497dea1de4be06e0bb7d"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\app\\layout.tsx": {
+    "mtime": 1780165309.1373906,
+    "ast_hash": "0eb175eb22388b33b808c6e9406a948f",
+    "semantic_hash": "0eb175eb22388b33b808c6e9406a948f"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\app\\page.tsx": {
+    "mtime": 1780165274.4039812,
+    "ast_hash": "82ffdac0a8854c62b34e724b8dbd2ae4",
+    "semantic_hash": "82ffdac0a8854c62b34e724b8dbd2ae4"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\app\\privacy\\page.tsx": {
+    "mtime": 1780109209.5970693,
+    "ast_hash": "e2af272f7cfe4f61d56d7d71c9c06cd7",
+    "semantic_hash": "e2af272f7cfe4f61d56d7d71c9c06cd7"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\components\\AppShell.tsx": {
+    "mtime": 1780165019.7726572,
+    "ast_hash": "612260ff6fdc5a43ee54a80d1b52407f",
+    "semantic_hash": "612260ff6fdc5a43ee54a80d1b52407f"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\components\\animations\\CustomCursor.tsx": {
+    "mtime": 1780164978.3497777,
+    "ast_hash": "69a8c420c41dc7a43f339aa806449325",
+    "semantic_hash": "69a8c420c41dc7a43f339aa806449325"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\components\\animations\\HeroCanvas.tsx": {
+    "mtime": 1780165015.285527,
+    "ast_hash": "126950465054e5512fa56d9df8aa7f66",
+    "semantic_hash": "126950465054e5512fa56d9df8aa7f66"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\components\\animations\\HeroShaderScene.tsx": {
+    "mtime": 1780166247.1091487,
+    "ast_hash": "1c09e55e240165766b492ff5f9c092f3",
+    "semantic_hash": "1c09e55e240165766b492ff5f9c092f3"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\components\\animations\\LenisProvider.tsx": {
+    "mtime": 1780164964.283993,
+    "ast_hash": "26cd4532f0b21b2d7a1732ae461e4551",
+    "semantic_hash": "26cd4532f0b21b2d7a1732ae461e4551"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\components\\animations\\Preloader.tsx": {
+    "mtime": 1780164991.01258,
+    "ast_hash": "275e38793be0ea32392ca7134ac5fe96",
+    "semantic_hash": "275e38793be0ea32392ca7134ac5fe96"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\components\\layout\\Sidebar.tsx": {
+    "mtime": 1780888248.2352204,
+    "ast_hash": "dabfac9b4862d8f4bb0f2b279e8ceb24",
+    "semantic_hash": "dabfac9b4862d8f4bb0f2b279e8ceb24"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\components\\ui\\avatar.tsx": {
+    "mtime": 1780108444.013712,
+    "ast_hash": "8b41492907a73176027427a3f0fd2302",
+    "semantic_hash": "8b41492907a73176027427a3f0fd2302"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\components\\ui\\badge.tsx": {
+    "mtime": 1780108443.151504,
+    "ast_hash": "e4ec840217040d5630ee6ed7213a1d72",
+    "semantic_hash": "e4ec840217040d5630ee6ed7213a1d72"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\components\\ui\\button.tsx": {
+    "mtime": 1780108430.929784,
+    "ast_hash": "e04ce5251d6b0dd04020988126c905e9",
+    "semantic_hash": "e04ce5251d6b0dd04020988126c905e9"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\components\\ui\\card.tsx": {
+    "mtime": 1780108442.5826886,
+    "ast_hash": "77a10bd948ca424972a28e704a3df604",
+    "semantic_hash": "77a10bd948ca424972a28e704a3df604"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\components\\ui\\dialog.tsx": {
+    "mtime": 1780108444.4123182,
+    "ast_hash": "d9618a63d34473ec512321cc12d43692",
+    "semantic_hash": "d9618a63d34473ec512321cc12d43692"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\components\\ui\\dropdown-menu.tsx": {
+    "mtime": 1780108443.4341743,
+    "ast_hash": "e6107cbb2088437e76a858f75b5a0280",
+    "semantic_hash": "e6107cbb2088437e76a858f75b5a0280"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\components\\ui\\input.tsx": {
+    "mtime": 1780108442.7267034,
+    "ast_hash": "0607b02d99a2e92f9509223f36ccc6ec",
+    "semantic_hash": "0607b02d99a2e92f9509223f36ccc6ec"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\components\\ui\\label.tsx": {
+    "mtime": 1780108442.8429668,
+    "ast_hash": "a70440da86bfc6a07f15197cca48cb08",
+    "semantic_hash": "a70440da86bfc6a07f15197cca48cb08"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\components\\ui\\progress.tsx": {
+    "mtime": 1780108443.6569037,
+    "ast_hash": "aa71e8ceb68b33af5ed5799f42cd873e",
+    "semantic_hash": "aa71e8ceb68b33af5ed5799f42cd873e"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\components\\ui\\select.tsx": {
+    "mtime": 1780108443.0298934,
+    "ast_hash": "ab95f478cb74d1906b07425c15b124cc",
+    "semantic_hash": "ab95f478cb74d1906b07425c15b124cc"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\components\\ui\\separator.tsx": {
+    "mtime": 1780108443.8915164,
+    "ast_hash": "3de2dca3e47ab29c4b1f632671545628",
+    "semantic_hash": "3de2dca3e47ab29c4b1f632671545628"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\components\\ui\\switch.tsx": {
+    "mtime": 1780108443.7760165,
+    "ast_hash": "049ff4b9c939a42157e99d6bbdeaaaec",
+    "semantic_hash": "049ff4b9c939a42157e99d6bbdeaaaec"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\components\\ui\\tabs.tsx": {
+    "mtime": 1780108443.2667897,
+    "ast_hash": "429035bc858475cd3bcedbb08a5ba8da",
+    "semantic_hash": "429035bc858475cd3bcedbb08a5ba8da"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\components\\ui\\textarea.tsx": {
+    "mtime": 1780108444.1331747,
+    "ast_hash": "d448d2a90e48542e51b93a1189127bf2",
+    "semantic_hash": "d448d2a90e48542e51b93a1189127bf2"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\components\\ui\\tooltip.tsx": {
+    "mtime": 1780108443.5438895,
+    "ast_hash": "6566a444ce6c0a87d6611903430534fa",
+    "semantic_hash": "6566a444ce6c0a87d6611903430534fa"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\lib\\supabase\\client.ts": {
+    "mtime": 1780108491.602247,
+    "ast_hash": "4cb5739c1e33353d8f9d66c1737df2d1",
+    "semantic_hash": "4cb5739c1e33353d8f9d66c1737df2d1"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\lib\\supabase\\middleware.ts": {
+    "mtime": 1780108500.094888,
+    "ast_hash": "c989c6c06345c65e765e2d83a0a688e1",
+    "semantic_hash": "c989c6c06345c65e765e2d83a0a688e1"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\lib\\supabase\\server.ts": {
+    "mtime": 1780108493.634624,
+    "ast_hash": "f0a0c1a93788a0cd494ff65e01cc9f7a",
+    "semantic_hash": "f0a0c1a93788a0cd494ff65e01cc9f7a"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\lib\\utils.ts": {
+    "mtime": 1780888211.0829196,
+    "ast_hash": "5d3e3149bebdbc459b7b6dd9ad8f0c34",
+    "semantic_hash": "5d3e3149bebdbc459b7b6dd9ad8f0c34"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\middleware.ts": {
+    "mtime": 1780108503.281613,
+    "ast_hash": "fff97ffb0ea3e328f559e299e6d2fb8c",
+    "semantic_hash": "fff97ffb0ea3e328f559e299e6d2fb8c"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\src\\types\\index.ts": {
+    "mtime": 1780108513.768887,
+    "ast_hash": "0f2492641aa8ed4aa3bb9c96f2236cbd",
+    "semantic_hash": "0f2492641aa8ed4aa3bb9c96f2236cbd"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\tailwind.config.ts": {
+    "mtime": 1780108488.0880053,
+    "ast_hash": "2457e830a9f607f05e757820c61a2d80",
+    "semantic_hash": "2457e830a9f607f05e757820c61a2d80"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\tsconfig.json": {
+    "mtime": 1780108268.4012113,
+    "ast_hash": "3bd7a3770c6b44dbcaab1d2f175db8bd",
+    "semantic_hash": "3bd7a3770c6b44dbcaab1d2f175db8bd"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\.playwright-mcp\\page-2026-05-30T18-27-02-734Z.yml": {
+    "mtime": 1780165622.7411118,
+    "ast_hash": "3784d3bf8a6e0959fd19536d4ff9259c",
+    "semantic_hash": "3784d3bf8a6e0959fd19536d4ff9259c"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\.playwright-mcp\\page-2026-05-30T18-27-36-433Z.yml": {
+    "mtime": 1780165656.4988751,
+    "ast_hash": "e5223090f831f654851ec8672a327d93",
+    "semantic_hash": "e5223090f831f654851ec8672a327d93"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\.playwright-mcp\\page-2026-05-30T18-29-39-424Z.yml": {
+    "mtime": 1780165779.4425118,
+    "ast_hash": "3784d3bf8a6e0959fd19536d4ff9259c",
+    "semantic_hash": "3784d3bf8a6e0959fd19536d4ff9259c"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\README.md": {
+    "mtime": 1780108237.0792806,
+    "ast_hash": "f15aaa42d5d299d091b1171097ea56ad",
+    "semantic_hash": "f15aaa42d5d299d091b1171097ea56ad"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\SETUP.md": {
+    "mtime": 1780109244.3375323,
+    "ast_hash": "bcb3fb7b965189a67c70f67fa6b84fb5",
+    "semantic_hash": "bcb3fb7b965189a67c70f67fa6b84fb5"
+  },
+  "C:\\Users\\mukes\\projects\\life-admin-os\\landing-hero.png": {
+    "mtime": 1780165658.8648486,
+    "ast_hash": "56cfbbbe46c516b3c65a7a0c5b3f0ed0",
+    "semantic_hash": "56cfbbbe46c516b3c65a7a0c5b3f0ed0"
+  }
+}
