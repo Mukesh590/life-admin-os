@@ -1,0 +1,157 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e55]:
+    - generic [ref=e58]:
+      - link "AdminOS" [ref=e60]:
+        - /url: /dashboard
+        - img [ref=e64]
+        - generic [ref=e67]: AdminOS
+      - navigation [ref=e68]:
+        - link "Dashboard" [ref=e70]:
+          - /url: /dashboard
+          - img [ref=e72]
+          - text: Dashboard
+        - link "Subscriptions" [ref=e78]:
+          - /url: /subscriptions
+          - img [ref=e79]
+          - text: Subscriptions
+        - link "Deadlines" [ref=e82]:
+          - /url: /deadlines
+          - img [ref=e83]
+          - text: Deadlines
+        - link "Documents" [ref=e86]:
+          - /url: /documents
+          - img [ref=e87]
+          - text: Documents
+        - link "Bills" [ref=e91]:
+          - /url: /bills
+          - img [ref=e92]
+          - text: Bills
+        - link "Appointments" [ref=e96]:
+          - /url: /appointments
+          - img [ref=e97]
+          - text: Appointments
+        - link "Warranties" [ref=e101]:
+          - /url: /warranties
+          - img [ref=e102]
+          - text: Warranties
+      - generic [ref=e106]:
+        - link "Settings" [ref=e107]:
+          - /url: /settings
+          - img [ref=e108]
+          - text: Settings
+        - generic [ref=e111]:
+          - generic [ref=e114]: M
+          - generic [ref=e115]: mukesen0204
+          - button "Sign out" [ref=e116]:
+            - img [ref=e117]
+    - main [ref=e120]:
+      - generic [ref=e123]:
+        - generic [ref=e124]:
+          - generic [ref=e125]:
+            - paragraph [ref=e126]: Monday, June 8
+            - heading "Good afternoon, mukesen0204" [level=1] [ref=e127]
+            - paragraph [ref=e128]: Everything looks on track today
+          - link "Add" [ref=e135]:
+            - /url: /documents
+            - img [ref=e136]
+            - text: Add
+        - generic [ref=e137]:
+          - link "$0.00 Monthly spend" [ref=e139]:
+            - /url: /subscriptions
+            - generic [ref=e140] [cursor=pointer]:
+              - img [ref=e143]
+              - generic [ref=e145]: $0.00
+              - generic [ref=e146]: Monthly spend
+          - link "0 items Expiring this week" [ref=e148]:
+            - /url: /subscriptions
+            - generic [ref=e149] [cursor=pointer]:
+              - img [ref=e152]
+              - generic [ref=e154]: 0 items
+              - generic [ref=e155]: Expiring this week
+          - link "0 tasks Deadlines due" [ref=e157]:
+            - /url: /deadlines
+            - generic [ref=e158] [cursor=pointer]:
+              - img [ref=e161]
+              - generic [ref=e163]: 0 tasks
+              - generic [ref=e164]: Deadlines due
+          - link "0 Documents" [ref=e166]:
+            - /url: /documents
+            - generic [ref=e167] [cursor=pointer]:
+              - img [ref=e170]
+              - generic [ref=e173]: "0"
+              - generic [ref=e174]: Documents
+        - generic [ref=e175]:
+          - generic [ref=e177]:
+            - generic [ref=e178]:
+              - generic [ref=e179]:
+                - img [ref=e181]
+                - heading "Upcoming deadlines" [level=2] [ref=e183]
+              - link "All" [ref=e184]:
+                - /url: /deadlines
+                - text: All
+                - img [ref=e185]
+            - generic [ref=e187]:
+              - img [ref=e189]
+              - paragraph [ref=e192]: No upcoming deadlines
+          - generic [ref=e194]:
+            - generic [ref=e195]:
+              - generic [ref=e196]:
+                - img [ref=e198]
+                - heading "Active subscriptions" [level=2] [ref=e200]
+              - link "All" [ref=e201]:
+                - /url: /subscriptions
+                - text: All
+                - img [ref=e202]
+            - generic [ref=e204]:
+              - img [ref=e206]
+              - paragraph [ref=e208]: No subscriptions tracked
+          - generic [ref=e210]:
+            - generic [ref=e211]:
+              - generic [ref=e212]:
+                - img [ref=e214]
+                - heading "Unpaid bills" [level=2] [ref=e217]
+              - link "All" [ref=e218]:
+                - /url: /bills
+                - text: All
+                - img [ref=e219]
+            - generic [ref=e221]:
+              - img [ref=e223]
+              - paragraph [ref=e226]: All bills are paid
+          - generic [ref=e228]:
+            - generic [ref=e229]:
+              - generic [ref=e230]:
+                - img [ref=e232]
+                - heading "Recent documents" [level=2] [ref=e235]
+              - link "All" [ref=e236]:
+                - /url: /documents
+                - text: All
+                - img [ref=e237]
+            - generic [ref=e239]:
+              - img [ref=e241]
+              - paragraph [ref=e244]: No documents yet
+        - generic [ref=e245]:
+          - generic [ref=e247]:
+            - generic [ref=e248]:
+              - generic [ref=e249]:
+                - img [ref=e251]
+                - heading "Upcoming appointments" [level=2] [ref=e254]
+              - link "All" [ref=e255]:
+                - /url: /appointments
+                - text: All
+                - img [ref=e256]
+            - generic [ref=e258]:
+              - img [ref=e260]
+              - paragraph [ref=e263]: No upcoming appointments
+          - generic [ref=e265]:
+            - generic [ref=e266]:
+              - generic [ref=e267]:
+                - img [ref=e269]
+                - heading "Warranties expiring" [level=2] [ref=e273]
+              - link "All" [ref=e274]:
+                - /url: /warranties
+                - text: All
+                - img [ref=e275]
+            - generic [ref=e277]:
+              - img [ref=e279]
+              - paragraph [ref=e282]: No warranties expiring soon
+  - alert [ref=e54]

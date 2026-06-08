@@ -1,0 +1,42 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]: A
+      - generic [ref=e5]: d
+      - generic [ref=e6]: m
+      - generic [ref=e7]: i
+      - generic [ref=e8]: "n"
+      - generic [ref=e9]: O
+      - generic [ref=e10]: S
+    - paragraph [ref=e11]: Your life. Organized.
+  - generic [ref=e14]:
+    - navigation [ref=e15]:
+      - link "AdminOS" [ref=e16]:
+        - /url: /
+        - img [ref=e18]
+        - generic [ref=e26]: AdminOS
+    - generic [ref=e29]:
+      - generic [ref=e30]:
+        - heading "Welcome back" [level=1] [ref=e31]
+        - paragraph [ref=e32]: Sign in to your Life Admin OS
+      - generic [ref=e33]:
+        - generic [ref=e34]:
+          - generic [ref=e35]: Email
+          - textbox "Email" [ref=e36]:
+            - /placeholder: you@example.com
+        - generic [ref=e37]:
+          - generic [ref=e38]: Password
+          - generic [ref=e39]:
+            - textbox "Password" [ref=e40]:
+              - /placeholder: Your password
+            - button "Show password" [ref=e41]:
+              - img [ref=e42]
+          - link "Forgot password?" [ref=e46]:
+            - /url: /reset-password
+        - button "Sign in" [ref=e47]:
+          - img [ref=e48]
+          - text: Sign in
+      - paragraph [ref=e51]:
+        - text: No account?
+        - link "Create one free" [ref=e52]:
+          - /url: /signup
