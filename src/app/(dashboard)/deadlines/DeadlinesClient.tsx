@@ -7,6 +7,7 @@ import type { Deadline } from '@/types'
 import { Plus, Calendar, Trash2, Edit2, CheckCircle2, AlertTriangle, X } from 'lucide-react'
 import { isBefore } from 'date-fns'
 import { motion, AnimatePresence } from 'framer-motion'
+import { staggerContainer, fadeUp, spring } from '@/lib/motion'
 
 const CATEGORIES = ['school', 'personal', 'work', 'financial', 'medical', 'government', 'other'] as const
 const PRIORITIES = ['critical', 'high', 'medium', 'low'] as const
@@ -91,7 +92,7 @@ export function DeadlinesClient({ initialData, userId }: Props) {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <motion.div className="flex items-center justify-between" variants={fadeUp} initial="hidden" animate="show">
         <div>
           <h1 className="text-2xl font-bold text-zinc-100 tracking-tight">Deadlines</h1>
           <p className="text-zinc-500 text-sm mt-1">
@@ -105,7 +106,7 @@ export function DeadlinesClient({ initialData, userId }: Props) {
           <Plus className="w-4 h-4" />
           Add deadline
         </button>
-      </div>
+      </motion.div>
 
       {overdue.length > 0 && (
         <div className="flex items-center gap-3 p-4 rounded-xl border border-red-500/20 bg-red-500/[0.05]">
@@ -151,7 +152,7 @@ export function DeadlinesClient({ initialData, userId }: Props) {
           </button>
         </div>
       ) : (
-        <div className="space-y-2">
+        <motion.div className="space-y-2" variants={staggerContainer(0.04, 0.1)} initial="hidden" animate="show">
           {filtered.map(d => {
             const days = getDaysUntil(d.due_date)
             const isOverdue = d.status === 'pending' && isBefore(new Date(d.due_date), now)
@@ -159,6 +160,7 @@ export function DeadlinesClient({ initialData, userId }: Props) {
               <motion.div
                 key={d.id}
                 layout
+                variants={fadeUp}
                 className={cn(
                   'flex items-center gap-4 p-4 rounded-xl border transition-all group',
                   d.status === 'completed'
@@ -199,7 +201,7 @@ export function DeadlinesClient({ initialData, userId }: Props) {
               </motion.div>
             )
           })}
-        </div>
+        </motion.div>
       )}
 
       {/* Slide-in form panel */}
@@ -212,7 +214,7 @@ export function DeadlinesClient({ initialData, userId }: Props) {
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 28, stiffness: 280 }}
+              transition={spring.soft}
               className="fixed right-0 top-0 h-full w-full max-w-[440px] z-50 flex flex-col shadow-2xl"
               style={{ background: '#111118', borderLeft: '1px solid rgba(255,255,255,0.06)' }}
             >

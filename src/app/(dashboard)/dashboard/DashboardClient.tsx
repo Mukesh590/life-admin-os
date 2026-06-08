@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { animate } from 'framer-motion'
+import { staggerItem, fadeUp } from '@/lib/motion'
 import {
   formatDate, getDaysUntil, getGreeting, getUrgencyColor,
   getPriorityBadge, getCategoryColor, monthlyCost, isExpiringSoon
@@ -70,15 +71,6 @@ function EmptyWidget({
 }
 
 const glass = { background: '#111118', border: '1px solid rgba(255,255,255,0.06)' }
-
-const stagger = (i: number) => ({
-  hidden: { y: 20, opacity: 0 },
-  show: {
-    y: 0,
-    opacity: 1,
-    transition: { delay: i * 0.08, duration: 0.4, ease: [0.16, 1, 0.3, 1] as const },
-  },
-})
 
 export function DashboardClient({
   user, profile, subscriptions, deadlines, documents, bills, appointments, warranties,
@@ -151,9 +143,9 @@ export function DashboardClient({
     <div className="space-y-6">
       {/* Header */}
       <motion.div
-        initial={{ y: -10, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.4, ease: 'easeOut' }}
+        variants={fadeUp}
+        initial="hidden"
+        animate="show"
         className="flex items-start justify-between"
       >
         <div>
@@ -180,7 +172,7 @@ export function DashboardClient({
         {kpis.map((kpi, i) => (
           <Link key={kpi.label} href={kpi.href}>
             <motion.div
-              variants={stagger(i)}
+              variants={staggerItem(i)}
               initial="hidden"
               animate="show"
               whileHover={{ scale: 1.02, boxShadow: '0 8px 32px rgba(0,0,0,0.5)', transition: { duration: 0.15 } }}
@@ -203,7 +195,7 @@ export function DashboardClient({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Upcoming deadlines */}
         <motion.div
-          variants={stagger(4)}
+          variants={staggerItem(4)}
           initial="hidden"
           animate="show"
           className="rounded-xl p-5"
@@ -241,7 +233,7 @@ export function DashboardClient({
 
         {/* Active subscriptions */}
         <motion.div
-          variants={stagger(5)}
+          variants={staggerItem(5)}
           initial="hidden"
           animate="show"
           className="rounded-xl p-5"
@@ -272,7 +264,7 @@ export function DashboardClient({
 
         {/* Unpaid bills */}
         <motion.div
-          variants={stagger(6)}
+          variants={staggerItem(6)}
           initial="hidden"
           animate="show"
           className="rounded-xl p-5"
@@ -303,7 +295,7 @@ export function DashboardClient({
 
         {/* Recent documents */}
         <motion.div
-          variants={stagger(7)}
+          variants={staggerItem(7)}
           initial="hidden"
           animate="show"
           className="rounded-xl p-5"
@@ -337,7 +329,7 @@ export function DashboardClient({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Appointments */}
         <motion.div
-          variants={stagger(8)}
+          variants={staggerItem(8)}
           initial="hidden"
           animate="show"
           className="rounded-xl p-5"
@@ -370,7 +362,7 @@ export function DashboardClient({
 
         {/* Warranties */}
         <motion.div
-          variants={stagger(9)}
+          variants={staggerItem(9)}
           initial="hidden"
           animate="show"
           className="rounded-xl p-5"

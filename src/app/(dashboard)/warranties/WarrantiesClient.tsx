@@ -6,6 +6,7 @@ import { formatDate, getDaysUntil, getUrgencyColor, isExpiringSoon, cn } from '@
 import type { Warranty } from '@/types'
 import { Plus, Package, Trash2, Edit2, CheckCircle2, AlertTriangle, X, ShieldCheck } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { staggerContainer, fadeUp, spring } from '@/lib/motion'
 
 type Props = { initialData: Warranty[]; userId: string }
 
@@ -56,7 +57,7 @@ export function WarrantiesClient({ initialData, userId }: Props) {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <motion.div className="flex items-center justify-between" variants={fadeUp} initial="hidden" animate="show">
         <div>
           <h1 className="text-2xl font-bold text-zinc-100 tracking-tight">Warranties</h1>
           <p className="text-zinc-500 text-sm mt-1">{valid.length} active{expiringSoon.length > 0 && `, ${expiringSoon.length} expiring soon`}</p>
@@ -68,7 +69,7 @@ export function WarrantiesClient({ initialData, userId }: Props) {
           <Plus className="w-4 h-4" />
           Add warranty
         </button>
-      </div>
+      </motion.div>
 
       {expiringSoon.length > 0 && (
         <div className="flex items-center gap-3 p-4 rounded-xl border border-amber-500/20 bg-amber-500/[0.04]">
@@ -93,7 +94,7 @@ export function WarrantiesClient({ initialData, userId }: Props) {
           </button>
         </div>
       ) : (
-        <div className="space-y-2">
+        <motion.div className="space-y-2" variants={staggerContainer(0.04, 0.1)} initial="hidden" animate="show">
           {warranties.map(w => {
             const days = getDaysUntil(w.expiry_date)
             const expired = days < 0
@@ -102,6 +103,7 @@ export function WarrantiesClient({ initialData, userId }: Props) {
               <motion.div
                 key={w.id}
                 layout
+                variants={fadeUp}
                 className={cn(
                   'flex items-center gap-4 p-4 rounded-xl border transition-all group',
                   expired
@@ -140,7 +142,7 @@ export function WarrantiesClient({ initialData, userId }: Props) {
               </motion.div>
             )
           })}
-        </div>
+        </motion.div>
       )}
 
       {/* Slide-in form panel */}
@@ -153,7 +155,7 @@ export function WarrantiesClient({ initialData, userId }: Props) {
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 28, stiffness: 280 }}
+              transition={spring.soft}
               className="fixed right-0 top-0 h-full w-full max-w-[440px] z-50 flex flex-col shadow-2xl"
               style={{ background: '#111118', borderLeft: '1px solid rgba(255,255,255,0.06)' }}
             >

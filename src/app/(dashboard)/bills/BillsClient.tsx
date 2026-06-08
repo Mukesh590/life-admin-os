@@ -7,6 +7,7 @@ import type { Bill } from '@/types'
 import { Plus, Receipt, Trash2, Edit2, CheckCircle2, AlertCircle, X } from 'lucide-react'
 import { isBefore } from 'date-fns'
 import { motion, AnimatePresence } from 'framer-motion'
+import { staggerContainer, fadeUp, spring } from '@/lib/motion'
 
 const CATEGORIES = ['utilities', 'rent', 'insurance', 'financial', 'medical', 'personal', 'other'] as const
 
@@ -72,7 +73,7 @@ export function BillsClient({ initialData, userId }: Props) {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <motion.div className="flex items-center justify-between" variants={fadeUp} initial="hidden" animate="show">
         <div>
           <h1 className="text-2xl font-bold text-zinc-100 tracking-tight">Bills</h1>
           <p className="text-zinc-500 text-sm mt-1">{unpaid.length} unpaid{overdue.length > 0 && `, ${overdue.length} overdue`}</p>
@@ -84,10 +85,10 @@ export function BillsClient({ initialData, userId }: Props) {
           <Plus className="w-4 h-4" />
           Add bill
         </button>
-      </div>
+      </motion.div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <motion.div className="grid grid-cols-1 sm:grid-cols-2 gap-3" variants={fadeUp} initial="hidden" animate="show">
         {[
           { label: 'Total unpaid', value: formatCurrency(totalUnpaid), icon: Receipt, valueColor: 'text-rose-300', iconBg: 'bg-rose-500/15 border-rose-500/20', iconColor: 'text-rose-400' },
           { label: 'Overdue bills', value: String(overdue.length), icon: AlertCircle, valueColor: overdue.length > 0 ? 'text-red-300' : 'text-emerald-300', iconBg: overdue.length > 0 ? 'bg-red-500/15 border-red-500/20' : 'bg-emerald-500/15 border-emerald-500/20', iconColor: overdue.length > 0 ? 'text-red-400' : 'text-emerald-400' },
@@ -100,7 +101,7 @@ export function BillsClient({ initialData, userId }: Props) {
             <div className="text-xs text-zinc-600 mt-1.5 font-medium">{s.label}</div>
           </div>
         ))}
-      </div>
+      </motion.div>
 
       {/* List */}
       {bills.length === 0 ? (
@@ -118,7 +119,7 @@ export function BillsClient({ initialData, userId }: Props) {
           </button>
         </div>
       ) : (
-        <div className="space-y-2">
+        <motion.div className="space-y-2" variants={staggerContainer(0.04, 0.1)} initial="hidden" animate="show">
           {bills.map(b => {
             const days = getDaysUntil(b.due_date)
             const isOverdueBill = !b.paid && isBefore(new Date(b.due_date), now)
@@ -126,6 +127,7 @@ export function BillsClient({ initialData, userId }: Props) {
               <motion.div
                 key={b.id}
                 layout
+                variants={fadeUp}
                 className={cn(
                   'flex items-center gap-4 p-4 rounded-xl border transition-all group',
                   b.paid
@@ -160,7 +162,7 @@ export function BillsClient({ initialData, userId }: Props) {
               </motion.div>
             )
           })}
-        </div>
+        </motion.div>
       )}
 
       {/* Slide-in form panel */}
@@ -173,7 +175,7 @@ export function BillsClient({ initialData, userId }: Props) {
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 28, stiffness: 280 }}
+              transition={spring.soft}
               className="fixed right-0 top-0 h-full w-full max-w-[440px] z-50 flex flex-col shadow-2xl"
               style={{ background: '#111118', borderLeft: '1px solid rgba(255,255,255,0.06)' }}
             >

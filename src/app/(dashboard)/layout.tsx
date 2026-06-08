@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { Sidebar } from '@/components/layout/Sidebar'
+import { PageTransition } from '@/components/animations/PageTransition'
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
@@ -15,7 +16,9 @@ export default async function DashboardLayout({ children }: { children: React.Re
       <Sidebar />
       <main className="flex-1 overflow-y-auto lg:pl-0 pt-14 lg:pt-0 scrollbar-thin">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6">
-          {children}
+          <PageTransition>
+            {children}
+          </PageTransition>
         </div>
       </main>
     </div>

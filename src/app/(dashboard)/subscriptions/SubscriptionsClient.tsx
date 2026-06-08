@@ -6,6 +6,7 @@ import { formatCurrency, formatDate, getDaysUntil, getCategoryColor, monthlyCost
 import type { Subscription } from '@/types'
 import { Plus, CreditCard, Trash2, Edit2, TrendingUp, AlertCircle, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { staggerContainer, fadeUp, spring } from '@/lib/motion'
 
 const CATEGORIES = ['Entertainment', 'Software', 'Utilities', 'Health', 'Education', 'Financial', 'Other']
 const BILLING_CYCLES = ['monthly', 'annual', 'weekly', 'quarterly'] as const
@@ -88,7 +89,7 @@ export function SubscriptionsClient({ initialData, userId }: Props) {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <motion.div className="flex items-center justify-between" variants={fadeUp} initial="hidden" animate="show">
         <div>
           <h1 className="text-2xl font-bold text-zinc-100 tracking-tight">Subscriptions</h1>
           <p className="text-zinc-500 text-sm mt-1">{subs.filter(s => s.status === 'active').length} active subscriptions</p>
@@ -100,10 +101,10 @@ export function SubscriptionsClient({ initialData, userId }: Props) {
           <Plus className="w-4 h-4" />
           Add subscription
         </button>
-      </div>
+      </motion.div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <motion.div className="grid grid-cols-1 sm:grid-cols-3 gap-3" variants={fadeUp} initial="hidden" animate="show">
         {[
           { label: 'Monthly cost', value: formatCurrency(totalMonthly), icon: CreditCard, valueColor: 'text-indigo-300', iconBg: 'bg-indigo-500/15 border-indigo-500/20', iconColor: 'text-indigo-400' },
           { label: 'Annual cost', value: formatCurrency(totalAnnual), icon: TrendingUp, valueColor: 'text-emerald-300', iconBg: 'bg-emerald-500/15 border-emerald-500/20', iconColor: 'text-emerald-400' },
@@ -117,7 +118,7 @@ export function SubscriptionsClient({ initialData, userId }: Props) {
             <div className="text-xs text-zinc-600 mt-1.5 font-medium">{stat.label}</div>
           </div>
         ))}
-      </div>
+      </motion.div>
 
       {/* Filter pills */}
       <div className="flex gap-2 flex-wrap">
@@ -153,13 +154,14 @@ export function SubscriptionsClient({ initialData, userId }: Props) {
           </button>
         </div>
       ) : (
-        <div className="space-y-2">
+        <motion.div className="space-y-2" variants={staggerContainer(0.04, 0.1)} initial="hidden" animate="show">
           {filtered.map(sub => {
             const days = getDaysUntil(sub.next_renewal_date)
             return (
               <motion.div
                 key={sub.id}
                 layout
+                variants={fadeUp}
                 className={`flex items-center gap-4 p-4 rounded-xl border border-white/[0.06] bg-[#111118] hover:bg-white/[0.03] hover:border-white/[0.09] transition-all group`}
               >
                 <div className="w-10 h-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shrink-0">
@@ -198,7 +200,7 @@ export function SubscriptionsClient({ initialData, userId }: Props) {
               </motion.div>
             )
           })}
-        </div>
+        </motion.div>
       )}
 
       {/* Slide-in form panel */}
@@ -218,7 +220,7 @@ export function SubscriptionsClient({ initialData, userId }: Props) {
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 28, stiffness: 280 }}
+              transition={spring.soft}
               className="fixed right-0 top-0 h-full w-full max-w-[440px] z-50 flex flex-col shadow-2xl"
               style={{ background: '#111118', borderLeft: '1px solid rgba(255,255,255,0.06)' }}
             >

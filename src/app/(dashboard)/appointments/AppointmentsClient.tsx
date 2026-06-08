@@ -7,6 +7,7 @@ import type { Appointment } from '@/types'
 import { Plus, Clock, Trash2, Edit2, MapPin, Calendar, X } from 'lucide-react'
 import { isAfter, isBefore, format } from 'date-fns'
 import { motion, AnimatePresence } from 'framer-motion'
+import { staggerContainer, fadeUp, spring } from '@/lib/motion'
 
 type Props = { initialData: Appointment[]; userId: string }
 
@@ -62,7 +63,7 @@ export function AppointmentsClient({ initialData, userId }: Props) {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <motion.div className="flex items-center justify-between" variants={fadeUp} initial="hidden" animate="show">
         <div>
           <h1 className="text-2xl font-bold text-zinc-100 tracking-tight">Appointments</h1>
           <p className="text-zinc-500 text-sm mt-1">{upcoming.length} upcoming</p>
@@ -74,7 +75,7 @@ export function AppointmentsClient({ initialData, userId }: Props) {
           <Plus className="w-4 h-4" />
           Add appointment
         </button>
-      </div>
+      </motion.div>
 
       {/* Tabs */}
       <div className="flex gap-2">
@@ -112,13 +113,14 @@ export function AppointmentsClient({ initialData, userId }: Props) {
           )}
         </div>
       ) : (
-        <div className="space-y-2">
+        <motion.div className="space-y-2" variants={staggerContainer(0.04, 0.1)} initial="hidden" animate="show">
           {displayed.map(a => {
             const dt = new Date(a.date_time)
             return (
               <motion.div
                 key={a.id}
                 layout
+                variants={fadeUp}
                 className={`flex items-start gap-4 p-4 rounded-xl border border-white/[0.06] bg-[#111118] hover:bg-white/[0.03] hover:border-white/[0.09] transition-all group`}
               >
                 <div className="text-center bg-violet-500/10 border border-violet-500/20 rounded-xl px-3 py-2 shrink-0 min-w-[48px]">
@@ -146,7 +148,7 @@ export function AppointmentsClient({ initialData, userId }: Props) {
               </motion.div>
             )
           })}
-        </div>
+        </motion.div>
       )}
 
       {/* Slide-in form panel */}
@@ -159,7 +161,7 @@ export function AppointmentsClient({ initialData, userId }: Props) {
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 28, stiffness: 280 }}
+              transition={spring.soft}
               className="fixed right-0 top-0 h-full w-full max-w-[440px] z-50 flex flex-col shadow-2xl"
               style={{ background: '#111118', borderLeft: '1px solid rgba(255,255,255,0.06)' }}
             >

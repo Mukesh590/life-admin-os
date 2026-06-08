@@ -6,6 +6,7 @@ import { formatDate, getCategoryColor } from '@/lib/utils'
 import type { Document as DocType, AIExtractionResult } from '@/types'
 import { Upload, FileText, Brain, Trash2, CheckCircle2, AlertCircle, Search, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { staggerContainer, fadeUp } from '@/lib/motion'
 
 type Props = { initialData: DocType[]; userId: string }
 
@@ -117,7 +118,7 @@ export function DocumentsClient({ initialData, userId }: Props) {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <motion.div className="flex items-center justify-between" variants={fadeUp} initial="hidden" animate="show">
         <div>
           <h1 className="text-2xl font-bold text-zinc-100 tracking-tight">Documents</h1>
           <p className="text-zinc-500 text-sm mt-1">{docs.length} documents stored</p>
@@ -134,7 +135,7 @@ export function DocumentsClient({ initialData, userId }: Props) {
           {uploading ? 'Uploading...' : extracting ? 'AI reading...' : 'Upload document'}
         </button>
         <input ref={fileRef} type="file" accept=".pdf,.png,.jpg,.jpeg" onChange={handleFileUpload} className="hidden" aria-label="Upload document" />
-      </div>
+      </motion.div>
 
       {error && (
         <div className="flex items-center gap-3 p-4 rounded-xl border border-red-500/20 bg-red-500/[0.05]">
@@ -254,11 +255,12 @@ export function DocumentsClient({ initialData, userId }: Props) {
           )}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        <motion.div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" variants={staggerContainer(0.05, 0.1)} initial="hidden" animate="show">
           {filtered.map(doc => (
             <motion.div
               key={doc.id}
               layout
+              variants={fadeUp}
               className={`rounded-xl p-4 transition-all hover:border-white/[0.1] group ${glass}`}
             >
               <div className="flex items-start justify-between mb-3">
@@ -288,7 +290,7 @@ export function DocumentsClient({ initialData, userId }: Props) {
               </a>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       )}
     </div>
   )
