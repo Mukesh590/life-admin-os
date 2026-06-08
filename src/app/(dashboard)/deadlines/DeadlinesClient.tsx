@@ -4,13 +4,18 @@ import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { formatDate, getDaysUntil, getUrgencyColor, getPriorityBadge, getCategoryColor, cn } from '@/lib/utils'
 import type { Deadline } from '@/types'
-import { Plus, Calendar, Trash2, Edit2, CheckCircle2, AlertTriangle } from 'lucide-react'
+import { Plus, Calendar, Trash2, Edit2, CheckCircle2, AlertTriangle, X } from 'lucide-react'
 import { isBefore } from 'date-fns'
+import { motion, AnimatePresence } from 'framer-motion'
 
 const CATEGORIES = ['school', 'personal', 'work', 'financial', 'medical', 'government', 'other'] as const
 const PRIORITIES = ['critical', 'high', 'medium', 'low'] as const
 
 type Props = { initialData: Deadline[]; userId: string }
+
+const glass = 'bg-[#111118] border border-white/[0.06]'
+const inputCls = 'w-full px-3 py-2.5 rounded-lg bg-white/[0.03] border border-white/[0.08] text-zinc-100 placeholder-zinc-700 focus:outline-none focus:ring-1 focus:ring-indigo-500/50 focus:border-indigo-500/30 transition-all text-sm'
+const labelCls = 'block text-xs font-medium text-zinc-500 mb-1.5 uppercase tracking-wide'
 
 export function DeadlinesClient({ initialData, userId }: Props) {
   const [deadlines, setDeadlines] = useState<Deadline[]>(initialData)
@@ -25,7 +30,6 @@ export function DeadlinesClient({ initialData, userId }: Props) {
   })
 
   const supabase = createClient()
-
   const now = new Date()
   const pending = deadlines.filter(d => d.status === 'pending' && !isBefore(new Date(d.due_date), now))
   const overdue = deadlines.filter(d => d.status === 'pending' && isBefore(new Date(d.due_date), now))
@@ -52,20 +56,16 @@ export function DeadlinesClient({ initialData, userId }: Props) {
     setShowForm(true)
   }
 
+  function closeForm() { setShowForm(false); resetForm() }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
     const payload = {
-      user_id: userId,
-      title: form.title,
-      due_date: form.due_date,
-      category: form.category,
-      priority: form.priority,
-      status: 'pending' as const,
-      recurring: form.recurring,
-      notes: form.notes || null,
+      user_id: userId, title: form.title, due_date: form.due_date,
+      category: form.category, priority: form.priority, status: 'pending' as const,
+      recurring: form.recurring, notes: form.notes || null,
     }
-
     if (editing) {
       const { data } = await supabase.from('deadlines').update(payload).eq('id', editing.id).select().single()
       if (data) setDeadlines(prev => prev.map(d => d.id === editing.id ? data : d))
@@ -74,8 +74,7 @@ export function DeadlinesClient({ initialData, userId }: Props) {
       if (data) setDeadlines(prev => [data, ...prev])
     }
     setLoading(false)
-    setShowForm(false)
-    resetForm()
+    closeForm()
   }
 
   async function toggleComplete(deadline: Deadline) {
@@ -94,14 +93,14 @@ export function DeadlinesClient({ initialData, userId }: Props) {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white">Deadlines</h1>
-          <p className="text-slate-400 text-sm mt-1">
+          <h1 className="text-2xl font-bold text-zinc-100 tracking-tight">Deadlines</h1>
+          <p className="text-zinc-500 text-sm mt-1">
             {pending.length} pending{overdue.length > 0 && `, ${overdue.length} overdue`}
           </p>
         </div>
         <button
           onClick={() => { resetForm(); setShowForm(true) }}
-          className="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-400 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all hover:-translate-y-0.5"
+          className="flex items-center gap-2 bg-gradient-to-r from-indigo-500 to-violet-600 hover:opacity-90 text-white px-4 py-2.5 rounded-lg text-sm font-semibold transition-opacity shadow-lg shadow-indigo-500/20"
         >
           <Plus className="w-4 h-4" />
           Add deadline
@@ -109,22 +108,23 @@ export function DeadlinesClient({ initialData, userId }: Props) {
       </div>
 
       {overdue.length > 0 && (
-        <div className="flex items-center gap-3 p-4 rounded-xl border border-red-500/20 bg-red-500/5">
+        <div className="flex items-center gap-3 p-4 rounded-xl border border-red-500/20 bg-red-500/[0.05]">
           <AlertTriangle className="w-5 h-5 text-red-400 shrink-0" />
           <p className="text-sm text-red-300">{overdue.length} deadline{overdue.length > 1 ? 's are' : ' is'} overdue and need your attention</p>
         </div>
       )}
 
+      {/* Filter pills */}
       <div className="flex gap-2 flex-wrap">
         {(['all', 'pending', 'overdue', 'completed'] as const).map(f => (
           <button
             key={f}
             onClick={() => setFilter(f)}
             className={cn(
-              'px-3 py-1.5 rounded-full text-xs font-medium transition-colors capitalize',
+              'px-3 py-1.5 rounded-full text-xs font-medium transition-all capitalize',
               filter === f
                 ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'
-                : 'bg-[#161b2e] text-slate-400 border border-white/[0.06] hover:text-slate-200'
+                : 'bg-white/[0.03] text-zinc-500 border border-white/[0.06] hover:text-zinc-300 hover:border-white/[0.1]'
             )}
           >
             {f}
@@ -135,123 +135,136 @@ export function DeadlinesClient({ initialData, userId }: Props) {
         ))}
       </div>
 
-      {showForm && (
-        <div className="rounded-xl border border-indigo-500/20 bg-[#111827] p-6">
-          <h2 className="text-sm font-semibold text-slate-200 mb-4">{editing ? 'Edit deadline' : 'New deadline'}</h2>
-          <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="sm:col-span-2">
-              <label className="block text-xs font-medium text-slate-400 mb-1.5">Title *</label>
-              <input
-                value={form.title}
-                onChange={e => setForm(p => ({ ...p, title: e.target.value }))}
-                required
-                placeholder="Tax return filing, License renewal..."
-                className="w-full px-3 py-2 rounded-lg bg-[#161b2e] border border-white/[0.08] text-slate-100 placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 text-sm"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-slate-400 mb-1.5">Due date *</label>
-              <input
-                type="date"
-                value={form.due_date}
-                onChange={e => setForm(p => ({ ...p, due_date: e.target.value }))}
-                required
-                className="w-full px-3 py-2 rounded-lg bg-[#161b2e] border border-white/[0.08] text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 text-sm"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-slate-400 mb-1.5">Priority</label>
-              <select
-                value={form.priority}
-                onChange={e => setForm(p => ({ ...p, priority: e.target.value as typeof PRIORITIES[number] }))}
-                className="w-full px-3 py-2 rounded-lg bg-[#161b2e] border border-white/[0.08] text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 text-sm"
-              >
-                {PRIORITIES.map(p => <option key={p} value={p} className="bg-[#161b2e] capitalize">{p}</option>)}
-              </select>
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-slate-400 mb-1.5">Category</label>
-              <select
-                value={form.category}
-                onChange={e => setForm(p => ({ ...p, category: e.target.value as typeof CATEGORIES[number] }))}
-                className="w-full px-3 py-2 rounded-lg bg-[#161b2e] border border-white/[0.08] text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 text-sm"
-              >
-                {CATEGORIES.map(c => <option key={c} value={c} className="bg-[#161b2e] capitalize">{c}</option>)}
-              </select>
-            </div>
-            <div>
-              <label className="flex items-center gap-2 cursor-pointer mt-6">
-                <input
-                  type="checkbox"
-                  checked={form.recurring}
-                  onChange={e => setForm(p => ({ ...p, recurring: e.target.checked }))}
-                  className="w-4 h-4 rounded border-white/20 bg-[#161b2e] text-indigo-500"
-                />
-                <span className="text-sm text-slate-300">Recurring deadline</span>
-              </label>
-            </div>
-            <div className="sm:col-span-2">
-              <label className="block text-xs font-medium text-slate-400 mb-1.5">Notes</label>
-              <textarea
-                value={form.notes}
-                onChange={e => setForm(p => ({ ...p, notes: e.target.value }))}
-                rows={2}
-                placeholder="Optional notes..."
-                className="w-full px-3 py-2 rounded-lg bg-[#161b2e] border border-white/[0.08] text-slate-100 placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 text-sm resize-none"
-              />
-            </div>
-            <div className="sm:col-span-2 flex gap-3 justify-end">
-              <button type="button" onClick={() => { setShowForm(false); resetForm() }} className="px-4 py-2 text-sm text-slate-400 hover:text-slate-200 transition-colors">Cancel</button>
-              <button type="submit" disabled={loading} className="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-400 disabled:opacity-60 text-white px-5 py-2 rounded-lg text-sm font-medium transition-all">
-                {loading && <span className="w-3 h-3 border border-white/30 border-t-white rounded-full animate-spin" />}
-                {editing ? 'Save changes' : 'Add deadline'}
-              </button>
-            </div>
-          </form>
-        </div>
-      )}
-
+      {/* List */}
       {filtered.length === 0 ? (
-        <div className="text-center py-16 rounded-xl border border-white/[0.06] bg-[#111827]">
-          <Calendar className="w-10 h-10 text-indigo-400/30 mx-auto mb-3" />
-          <p className="text-slate-400 text-sm mb-4">No deadlines here</p>
-          <button onClick={() => { resetForm(); setShowForm(true) }} className="text-indigo-400 hover:text-indigo-300 text-sm">Add your first deadline</button>
+        <div className={`rounded-xl py-20 px-8 text-center ${glass}`}>
+          <div className="w-16 h-16 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-center mx-auto mb-5">
+            <Calendar className="w-8 h-8 text-zinc-800" />
+          </div>
+          <h3 className="text-base font-bold text-zinc-300 mb-2">Nothing here yet</h3>
+          <p className="text-sm text-zinc-600 mb-6 max-w-xs mx-auto">Add deadlines to stay on top of important dates and tasks.</p>
+          <button
+            onClick={() => { resetForm(); setShowForm(true) }}
+            className="bg-gradient-to-r from-indigo-500 to-violet-600 hover:opacity-90 text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-opacity"
+          >
+            Add your first deadline
+          </button>
         </div>
       ) : (
         <div className="space-y-2">
-          {filtered.map((d) => {
+          {filtered.map(d => {
             const days = getDaysUntil(d.due_date)
             const isOverdue = d.status === 'pending' && isBefore(new Date(d.due_date), now)
             return (
-              <div key={d.id} className={cn("flex items-center gap-4 p-4 rounded-xl border transition-colors group", d.status === 'completed' ? 'border-white/[0.04] bg-[#0e1322] opacity-60' : isOverdue ? 'border-red-500/20 bg-red-500/5' : 'border-white/[0.06] bg-[#111827] hover:bg-[#141a2e]')}>
+              <motion.div
+                key={d.id}
+                layout
+                className={cn(
+                  'flex items-center gap-4 p-4 rounded-xl border transition-all group',
+                  d.status === 'completed'
+                    ? 'border-white/[0.04] bg-[#0d0d12] opacity-60'
+                    : isOverdue
+                    ? 'border-red-500/20 bg-red-500/[0.04] hover:bg-red-500/[0.06]'
+                    : 'border-white/[0.06] bg-[#111118] hover:bg-white/[0.03] hover:border-white/[0.09]'
+                )}
+              >
                 <button
                   onClick={() => toggleComplete(d)}
-                  className={cn("w-5 h-5 rounded-full border-2 shrink-0 transition-colors", d.status === 'completed' ? 'border-emerald-400 bg-emerald-400/20' : 'border-slate-600 hover:border-emerald-400')}
+                  className={cn(
+                    'w-5 h-5 rounded-full border-2 shrink-0 transition-all flex items-center justify-center',
+                    d.status === 'completed'
+                      ? 'border-emerald-400 bg-emerald-400/20'
+                      : 'border-zinc-700 hover:border-emerald-400'
+                  )}
                   aria-label={d.status === 'completed' ? 'Mark pending' : 'Mark complete'}
                 >
-                  {d.status === 'completed' && <CheckCircle2 className="w-full h-full text-emerald-400" />}
+                  {d.status === 'completed' && <CheckCircle2 className="w-4 h-4 text-emerald-400" />}
                 </button>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className={cn("text-sm font-medium", d.status === 'completed' ? 'line-through text-slate-500' : 'text-slate-200')}>{d.title}</span>
-                    <span className={`text-xs px-2 py-0.5 rounded-full ${getPriorityBadge(d.priority)} border`}>{d.priority}</span>
-                    <span className={`text-xs px-2 py-0.5 rounded-full ${getCategoryColor(d.category)}`}>{d.category}</span>
-                    {d.recurring && <span className="text-xs px-2 py-0.5 rounded-full bg-violet-500/10 text-violet-400">recurring</span>}
+                    <span className={cn('text-sm font-medium', d.status === 'completed' ? 'line-through text-zinc-500' : 'text-zinc-200')}>{d.title}</span>
+                    <span className={`text-[10px] px-2 py-0.5 rounded-full border font-medium ${getPriorityBadge(d.priority)}`}>{d.priority}</span>
+                    <span className={`text-[10px] px-2 py-0.5 rounded-full border font-medium ${getCategoryColor(d.category)}`}>{d.category}</span>
+                    {d.recurring && <span className="text-[10px] px-2 py-0.5 rounded-full bg-violet-500/10 text-violet-400 border border-violet-500/20">recurring</span>}
                   </div>
-                  <p className="text-xs text-slate-500 mt-0.5">{formatDate(d.due_date)}</p>
+                  <p className="text-xs text-zinc-600 mt-0.5">{formatDate(d.due_date)}</p>
                 </div>
-                <span className={cn("text-xs font-mono font-bold shrink-0", d.status === 'completed' ? 'text-slate-500' : getUrgencyColor(days))}>
+                <span className={cn('text-xs font-mono font-bold shrink-0', d.status === 'completed' ? 'text-zinc-600' : getUrgencyColor(days))}>
                   {d.status === 'completed' ? 'Done' : isOverdue ? `${Math.abs(days)}d ago` : days === 0 ? 'Today' : `${days}d`}
                 </span>
                 <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button onClick={() => openEdit(d)} className="p-1.5 rounded-lg hover:bg-white/[0.08] text-slate-500 hover:text-slate-200 transition-colors" aria-label="Edit"><Edit2 className="w-3.5 h-3.5" /></button>
-                  <button onClick={() => handleDelete(d.id)} className="p-1.5 rounded-lg hover:bg-red-500/10 text-slate-500 hover:text-red-400 transition-colors" aria-label="Delete"><Trash2 className="w-3.5 h-3.5" /></button>
+                  <button onClick={() => openEdit(d)} className="p-1.5 rounded-lg hover:bg-white/[0.08] text-zinc-600 hover:text-zinc-200 transition-colors" aria-label="Edit"><Edit2 className="w-3.5 h-3.5" /></button>
+                  <button onClick={() => handleDelete(d.id)} className="p-1.5 rounded-lg hover:bg-red-500/10 text-zinc-600 hover:text-red-400 transition-colors" aria-label="Delete"><Trash2 className="w-3.5 h-3.5" /></button>
                 </div>
-              </div>
+              </motion.div>
             )
           })}
         </div>
       )}
+
+      {/* Slide-in form panel */}
+      <AnimatePresence>
+        {showForm && (
+          <>
+            <motion.div key="backdrop" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40" onClick={closeForm} />
+            <motion.div
+              key="panel"
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 28, stiffness: 280 }}
+              className="fixed right-0 top-0 h-full w-full max-w-[440px] z-50 flex flex-col shadow-2xl"
+              style={{ background: '#111118', borderLeft: '1px solid rgba(255,255,255,0.06)' }}
+            >
+              <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06] shrink-0">
+                <h2 className="text-sm font-semibold text-zinc-100">{editing ? 'Edit deadline' : 'New deadline'}</h2>
+                <button onClick={closeForm} className="p-1.5 rounded-lg text-zinc-500 hover:text-zinc-200 hover:bg-white/[0.06] transition-all"><X className="w-4 h-4" /></button>
+              </div>
+              <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto flex flex-col">
+                <div className="px-6 py-5 space-y-4 flex-1">
+                  <div>
+                    <label className={labelCls}>Title *</label>
+                    <input value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} required placeholder="Tax return filing, License renewal..." className={inputCls} />
+                  </div>
+                  <div>
+                    <label className={labelCls}>Due date *</label>
+                    <input type="date" value={form.due_date} onChange={e => setForm(p => ({ ...p, due_date: e.target.value }))} required className={inputCls} />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className={labelCls}>Priority</label>
+                      <select value={form.priority} onChange={e => setForm(p => ({ ...p, priority: e.target.value as typeof PRIORITIES[number] }))} className={inputCls}>
+                        {PRIORITIES.map(p => <option key={p} value={p} className="bg-[#111118] capitalize">{p}</option>)}
+                      </select>
+                    </div>
+                    <div>
+                      <label className={labelCls}>Category</label>
+                      <select value={form.category} onChange={e => setForm(p => ({ ...p, category: e.target.value as typeof CATEGORIES[number] }))} className={inputCls}>
+                        {CATEGORIES.map(c => <option key={c} value={c} className="bg-[#111118] capitalize">{c}</option>)}
+                      </select>
+                    </div>
+                  </div>
+                  <div>
+                    <label className={labelCls}>Notes</label>
+                    <textarea value={form.notes} onChange={e => setForm(p => ({ ...p, notes: e.target.value }))} rows={3} placeholder="Optional notes..." className={inputCls + ' resize-none'} />
+                  </div>
+                  <label className="flex items-center gap-2.5 cursor-pointer">
+                    <input type="checkbox" checked={form.recurring} onChange={e => setForm(p => ({ ...p, recurring: e.target.checked }))} className="w-4 h-4 rounded border-white/20 bg-white/[0.03] accent-indigo-500" />
+                    <span className="text-sm text-zinc-400">Recurring deadline</span>
+                  </label>
+                </div>
+                <div className="px-6 py-4 border-t border-white/[0.06] flex gap-3 justify-end shrink-0">
+                  <button type="button" onClick={closeForm} className="px-4 py-2 text-sm text-zinc-500 hover:text-zinc-200 transition-colors">Cancel</button>
+                  <button type="submit" disabled={loading} className="flex items-center gap-2 bg-gradient-to-r from-indigo-500 to-violet-600 hover:opacity-90 disabled:opacity-50 text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-opacity">
+                    {loading && <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />}
+                    {editing ? 'Save changes' : 'Add deadline'}
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

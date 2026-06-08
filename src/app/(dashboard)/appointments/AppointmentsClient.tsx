@@ -4,10 +4,15 @@ import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 import type { Appointment } from '@/types'
-import { Plus, Clock, Trash2, Edit2, MapPin, Calendar } from 'lucide-react'
+import { Plus, Clock, Trash2, Edit2, MapPin, Calendar, X } from 'lucide-react'
 import { isAfter, isBefore, format } from 'date-fns'
+import { motion, AnimatePresence } from 'framer-motion'
 
 type Props = { initialData: Appointment[]; userId: string }
+
+const glass = 'bg-[#111118] border border-white/[0.06]'
+const inputCls = 'w-full px-3 py-2.5 rounded-lg bg-white/[0.03] border border-white/[0.08] text-zinc-100 placeholder-zinc-700 focus:outline-none focus:ring-1 focus:ring-indigo-500/50 focus:border-indigo-500/30 transition-all text-sm'
+const labelCls = 'block text-xs font-medium text-zinc-500 mb-1.5 uppercase tracking-wide'
 
 export function AppointmentsClient({ initialData, userId }: Props) {
   const [apts, setApts] = useState<Appointment[]>(initialData)
@@ -15,12 +20,12 @@ export function AppointmentsClient({ initialData, userId }: Props) {
   const [editing, setEditing] = useState<Appointment | null>(null)
   const [loading, setLoading] = useState(false)
   const [form, setForm] = useState({ title: '', date_time: '', location: '', notes: '' })
+  const [tab, setTab] = useState<'upcoming' | 'past'>('upcoming')
 
   const supabase = createClient()
   const now = new Date()
   const upcoming = apts.filter(a => isAfter(new Date(a.date_time), now))
   const past = apts.filter(a => isBefore(new Date(a.date_time), now))
-  const [tab, setTab] = useState<'upcoming' | 'past'>('upcoming')
   const displayed = tab === 'upcoming' ? upcoming : past
 
   function resetForm() { setForm({ title: '', date_time: '', location: '', notes: '' }); setEditing(null) }
@@ -33,6 +38,8 @@ export function AppointmentsClient({ initialData, userId }: Props) {
     setShowForm(true)
   }
 
+  function closeForm() { setShowForm(false); resetForm() }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
@@ -44,7 +51,7 @@ export function AppointmentsClient({ initialData, userId }: Props) {
       const { data } = await supabase.from('appointments').insert(payload).select().single()
       if (data) setApts(prev => [...prev, data].sort((a, b) => new Date(a.date_time).getTime() - new Date(b.date_time).getTime()))
     }
-    setLoading(false); setShowForm(false); resetForm()
+    setLoading(false); closeForm()
   }
 
   async function handleDelete(id: string) {
@@ -57,92 +64,140 @@ export function AppointmentsClient({ initialData, userId }: Props) {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white">Appointments</h1>
-          <p className="text-slate-400 text-sm mt-1">{upcoming.length} upcoming</p>
+          <h1 className="text-2xl font-bold text-zinc-100 tracking-tight">Appointments</h1>
+          <p className="text-zinc-500 text-sm mt-1">{upcoming.length} upcoming</p>
         </div>
-        <button onClick={() => { resetForm(); setShowForm(true) }} className="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-400 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all hover:-translate-y-0.5">
-          <Plus className="w-4 h-4" />Add appointment
+        <button
+          onClick={() => { resetForm(); setShowForm(true) }}
+          className="flex items-center gap-2 bg-gradient-to-r from-indigo-500 to-violet-600 hover:opacity-90 text-white px-4 py-2.5 rounded-lg text-sm font-semibold transition-opacity shadow-lg shadow-indigo-500/20"
+        >
+          <Plus className="w-4 h-4" />
+          Add appointment
         </button>
       </div>
 
+      {/* Tabs */}
       <div className="flex gap-2">
         {(['upcoming', 'past'] as const).map(t => (
-          <button key={t} onClick={() => setTab(t)} className={cn('px-3 py-1.5 rounded-full text-xs font-medium transition-colors capitalize', tab === t ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30' : 'bg-[#161b2e] text-slate-400 border border-white/[0.06] hover:text-slate-200')}>
+          <button
+            key={t}
+            onClick={() => setTab(t)}
+            className={cn(
+              'px-3 py-1.5 rounded-full text-xs font-medium transition-all capitalize',
+              tab === t
+                ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'
+                : 'bg-white/[0.03] text-zinc-500 border border-white/[0.06] hover:text-zinc-300 hover:border-white/[0.1]'
+            )}
+          >
             {t} ({t === 'upcoming' ? upcoming.length : past.length})
           </button>
         ))}
       </div>
 
-      {showForm && (
-        <div className="rounded-xl border border-indigo-500/20 bg-[#111827] p-6">
-          <h2 className="text-sm font-semibold text-slate-200 mb-4">{editing ? 'Edit appointment' : 'New appointment'}</h2>
-          <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="sm:col-span-2">
-              <label className="block text-xs font-medium text-slate-400 mb-1.5">Title *</label>
-              <input value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} required placeholder="Doctor checkup, Dentist..." className="w-full px-3 py-2 rounded-lg bg-[#161b2e] border border-white/[0.08] text-slate-100 placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 text-sm" />
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-slate-400 mb-1.5">Date and time *</label>
-              <input type="datetime-local" value={form.date_time} onChange={e => setForm(p => ({ ...p, date_time: e.target.value }))} required className="w-full px-3 py-2 rounded-lg bg-[#161b2e] border border-white/[0.08] text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 text-sm" />
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-slate-400 mb-1.5">Location</label>
-              <input value={form.location} onChange={e => setForm(p => ({ ...p, location: e.target.value }))} placeholder="123 Main St, Room 4B" className="w-full px-3 py-2 rounded-lg bg-[#161b2e] border border-white/[0.08] text-slate-100 placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 text-sm" />
-            </div>
-            <div className="sm:col-span-2">
-              <label className="block text-xs font-medium text-slate-400 mb-1.5">Notes</label>
-              <textarea value={form.notes} onChange={e => setForm(p => ({ ...p, notes: e.target.value }))} rows={2} placeholder="Bring insurance card, fasting required..." className="w-full px-3 py-2 rounded-lg bg-[#161b2e] border border-white/[0.08] text-slate-100 placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 text-sm resize-none" />
-            </div>
-            <div className="sm:col-span-2 flex gap-3 justify-end">
-              <button type="button" onClick={() => { setShowForm(false); resetForm() }} className="px-4 py-2 text-sm text-slate-400 hover:text-slate-200">Cancel</button>
-              <button type="submit" disabled={loading} className="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-400 disabled:opacity-60 text-white px-5 py-2 rounded-lg text-sm font-medium">
-                {loading && <span className="w-3 h-3 border border-white/30 border-t-white rounded-full animate-spin" />}
-                {editing ? 'Save changes' : 'Add appointment'}
-              </button>
-            </div>
-          </form>
-        </div>
-      )}
-
+      {/* List */}
       {displayed.length === 0 ? (
-        <div className="text-center py-16 rounded-xl border border-white/[0.06] bg-[#111827]">
-          <Clock className="w-10 h-10 text-violet-400/30 mx-auto mb-3" />
-          <p className="text-slate-400 text-sm mb-4">No {tab} appointments</p>
-          {tab === 'upcoming' && <button onClick={() => { resetForm(); setShowForm(true) }} className="text-indigo-400 hover:text-indigo-300 text-sm">Schedule one</button>}
+        <div className={`rounded-xl py-20 px-8 text-center ${glass}`}>
+          <div className="w-16 h-16 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-center mx-auto mb-5">
+            <Clock className="w-8 h-8 text-zinc-800" />
+          </div>
+          <h3 className="text-base font-bold text-zinc-300 mb-2">Nothing here yet</h3>
+          <p className="text-sm text-zinc-600 mb-6 max-w-xs mx-auto">Schedule appointments to keep track of your upcoming commitments.</p>
+          {tab === 'upcoming' && (
+            <button
+              onClick={() => { resetForm(); setShowForm(true) }}
+              className="bg-gradient-to-r from-indigo-500 to-violet-600 hover:opacity-90 text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-opacity"
+            >
+              Schedule one
+            </button>
+          )}
         </div>
       ) : (
         <div className="space-y-2">
           {displayed.map(a => {
             const dt = new Date(a.date_time)
             return (
-              <div key={a.id} className="flex items-start gap-4 p-4 rounded-xl border border-white/[0.06] bg-[#111827] hover:bg-[#141a2e] transition-colors group">
-                <div className="text-center bg-violet-500/10 border border-violet-500/20 rounded-xl px-3 py-2 shrink-0">
-                  <p className="text-[10px] text-violet-400 font-medium uppercase">{format(dt, 'MMM')}</p>
-                  <p className="text-xl font-bold text-violet-300 leading-none">{format(dt, 'd')}</p>
+              <motion.div
+                key={a.id}
+                layout
+                className={`flex items-start gap-4 p-4 rounded-xl border border-white/[0.06] bg-[#111118] hover:bg-white/[0.03] hover:border-white/[0.09] transition-all group`}
+              >
+                <div className="text-center bg-violet-500/10 border border-violet-500/20 rounded-xl px-3 py-2 shrink-0 min-w-[48px]">
+                  <p className="text-[10px] text-violet-400 font-semibold uppercase tracking-wide">{format(dt, 'MMM')}</p>
+                  <p className="text-xl font-bold text-violet-300 leading-tight">{format(dt, 'd')}</p>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-slate-200">{a.title}</p>
-                  <div className="flex items-center gap-3 mt-1">
-                    <span className="flex items-center gap-1 text-xs text-slate-500">
+                  <p className="text-sm font-medium text-zinc-200">{a.title}</p>
+                  <div className="flex items-center gap-3 mt-1 flex-wrap">
+                    <span className="flex items-center gap-1 text-xs text-zinc-500">
                       <Calendar className="w-3 h-3" />{format(dt, 'h:mm a')}
                     </span>
                     {a.location && (
-                      <span className="flex items-center gap-1 text-xs text-slate-500">
+                      <span className="flex items-center gap-1 text-xs text-zinc-500">
                         <MapPin className="w-3 h-3" />{a.location}
                       </span>
                     )}
                   </div>
-                  {a.notes && <p className="text-xs text-slate-500 mt-1">{a.notes}</p>}
+                  {a.notes && <p className="text-xs text-zinc-600 mt-1">{a.notes}</p>}
                 </div>
-                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button onClick={() => openEdit(a)} className="p-1.5 rounded-lg hover:bg-white/[0.08] text-slate-500 hover:text-slate-200" aria-label="Edit"><Edit2 className="w-3.5 h-3.5" /></button>
-                  <button onClick={() => handleDelete(a.id)} className="p-1.5 rounded-lg hover:bg-red-500/10 text-slate-500 hover:text-red-400" aria-label="Delete"><Trash2 className="w-3.5 h-3.5" /></button>
+                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+                  <button onClick={() => openEdit(a)} className="p-1.5 rounded-lg hover:bg-white/[0.08] text-zinc-600 hover:text-zinc-200 transition-colors" aria-label="Edit"><Edit2 className="w-3.5 h-3.5" /></button>
+                  <button onClick={() => handleDelete(a.id)} className="p-1.5 rounded-lg hover:bg-red-500/10 text-zinc-600 hover:text-red-400 transition-colors" aria-label="Delete"><Trash2 className="w-3.5 h-3.5" /></button>
                 </div>
-              </div>
+              </motion.div>
             )
           })}
         </div>
       )}
+
+      {/* Slide-in form panel */}
+      <AnimatePresence>
+        {showForm && (
+          <>
+            <motion.div key="backdrop" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40" onClick={closeForm} />
+            <motion.div
+              key="panel"
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 28, stiffness: 280 }}
+              className="fixed right-0 top-0 h-full w-full max-w-[440px] z-50 flex flex-col shadow-2xl"
+              style={{ background: '#111118', borderLeft: '1px solid rgba(255,255,255,0.06)' }}
+            >
+              <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06] shrink-0">
+                <h2 className="text-sm font-semibold text-zinc-100">{editing ? 'Edit appointment' : 'New appointment'}</h2>
+                <button onClick={closeForm} className="p-1.5 rounded-lg text-zinc-500 hover:text-zinc-200 hover:bg-white/[0.06] transition-all"><X className="w-4 h-4" /></button>
+              </div>
+              <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto flex flex-col">
+                <div className="px-6 py-5 space-y-4 flex-1">
+                  <div>
+                    <label className={labelCls}>Title *</label>
+                    <input value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} required placeholder="Doctor checkup, Dentist..." className={inputCls} />
+                  </div>
+                  <div>
+                    <label className={labelCls}>Date and time *</label>
+                    <input type="datetime-local" value={form.date_time} onChange={e => setForm(p => ({ ...p, date_time: e.target.value }))} required className={inputCls} />
+                  </div>
+                  <div>
+                    <label className={labelCls}>Location</label>
+                    <input value={form.location} onChange={e => setForm(p => ({ ...p, location: e.target.value }))} placeholder="123 Main St, Room 4B" className={inputCls} />
+                  </div>
+                  <div>
+                    <label className={labelCls}>Notes</label>
+                    <textarea value={form.notes} onChange={e => setForm(p => ({ ...p, notes: e.target.value }))} rows={3} placeholder="Bring insurance card, fasting required..." className={inputCls + ' resize-none'} />
+                  </div>
+                </div>
+                <div className="px-6 py-4 border-t border-white/[0.06] flex gap-3 justify-end shrink-0">
+                  <button type="button" onClick={closeForm} className="px-4 py-2 text-sm text-zinc-500 hover:text-zinc-200 transition-colors">Cancel</button>
+                  <button type="submit" disabled={loading} className="flex items-center gap-2 bg-gradient-to-r from-indigo-500 to-violet-600 hover:opacity-90 disabled:opacity-50 text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-opacity">
+                    {loading && <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />}
+                    {editing ? 'Save changes' : 'Add appointment'}
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
