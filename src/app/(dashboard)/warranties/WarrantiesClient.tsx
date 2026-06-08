@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { formatDate, getDaysUntil, getUrgencyColor, isExpiringSoon, cn } from '@/lib/utils'
 import type { Warranty } from '@/types'
-import { Plus, Package, Trash2, Edit2, CheckCircle2, AlertTriangle, X, ShieldCheck } from 'lucide-react'
+import { Plus, Package, Trash2, Edit2, AlertTriangle, X, ShieldCheck } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { staggerContainer, fadeUp, spring } from '@/lib/motion'
 

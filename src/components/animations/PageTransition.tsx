@@ -1,18 +1,21 @@
 'use client'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { usePathname } from 'next/navigation'
-import { ease } from '@/lib/motion'
 
 export function PageTransition({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   return (
-    <motion.div
-      key={pathname}
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35, ease: ease.out }}
-    >
-      {children}
-    </motion.div>
+    <AnimatePresence mode="wait" initial={false}>
+      <motion.div
+        key={pathname}
+        initial={{ opacity: 0, clipPath: 'inset(0 100% 0 0)' }}
+        animate={{ opacity: 1, clipPath: 'inset(0 0% 0 0)' }}
+        exit={{ opacity: 0, clipPath: 'inset(0 0 0 100%)' }}
+        transition={{ duration: 0.28, ease: [0.76, 0, 0.24, 1] }}
+        style={{ willChange: 'clip-path, opacity' }}
+      >
+        {children}
+      </motion.div>
+    </AnimatePresence>
   )
 }

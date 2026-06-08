@@ -1,19 +1,27 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Syne, DM_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { AppShell } from "@/components/AppShell";
 
-const inter = Inter({
+const syne = Syne({
+  subsets: ['latin'],
+  variable: '--font-display',
+  weight: ['400', '500', '600', '700', '800'],
+  display: 'swap',
+})
+
+const dmSans = DM_Sans({
   subsets: ['latin'],
   variable: '--font-sans',
+  weight: ['300', '400', '500', '600'],
   display: 'swap',
-});
+})
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
   variable: '--font-mono',
   display: 'swap',
-});
+})
 
 export const metadata: Metadata = {
   title: "Life Admin OS - Your AI-powered life operating system",
@@ -33,7 +41,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
-      <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased bg-[#09090b] text-[#fafafa]`}>
+      <body className={`${syne.variable} ${dmSans.variable} ${jetbrainsMono.variable} font-sans antialiased bg-[#04040a] text-[#e8e8f0]`}>
         <AppShell>
           {children}
         </AppShell>
