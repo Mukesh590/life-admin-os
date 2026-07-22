@@ -47,6 +47,18 @@
     --rose: #fb7185;
     --emerald: #34d399;
 
+    /* Domain-locked accent palette (Life Admin OS) — same values, named for
+       what they track rather than what they look like. */
+    --ledger-indigo: #5b5ef4;   /* subscriptions, primary actions */
+    --ember-rose: #fb7185;      /* deadlines, overdue */
+    --amber-notice: #fbbf24;    /* bills, due soon */
+    --vault-teal: #22d3ee;      /* documents */
+    --dusk-violet: #9b7cf7;     /* appointments */
+    --verdant-seal: #34d399;    /* warranties, all-clear */
+
+    /* Text tokens */
+    --text-muted: #8a8aa3;      /* secondary/tertiary text — verified ~5.8:1 on card surfaces */
+
     /* Sidebar */
     --sidebar: 244 10% 4%;
     --sidebar-foreground: 240 8% 78%;
@@ -130,12 +142,13 @@
     scrollbar-color: rgba(255,255,255,0.05) transparent;
   }
 
-  /* Premium glassmorphism */
+  /* Premium glassmorphism — the dashboard's committed card surface.
+     Opacity tuned low enough that dashboard-ambient's color bleeds through. */
   .glass {
-    background: rgba(12,12,20,0.7);
+    background: rgba(11,11,19,0.6);
     backdrop-filter: blur(20px) saturate(1.4);
     -webkit-backdrop-filter: blur(20px) saturate(1.4);
-    border: 1px solid rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
   }
 
   /* Deep card surface */

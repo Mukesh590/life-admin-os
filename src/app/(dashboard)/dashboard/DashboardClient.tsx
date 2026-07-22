@@ -2,11 +2,11 @@
 
 import { useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { motion, useMotionValue, useTransform, animate } from 'framer-motion'
+import { motion, MotionConfig, useMotionValue, useTransform, useReducedMotion, animate } from 'framer-motion'
 import dynamic from 'next/dynamic'
 import { staggerItem } from '@/lib/motion'
 import {
-  formatDate, getDaysUntil, getGreeting, getUrgencyColor,
+  cn, formatDate, getDaysUntil, getGreeting, getUrgencyColor,
   getPriorityBadge, monthlyCost, isExpiringSoon,
 } from '@/lib/utils'
 import type { Subscription, Deadline, Document, Bill, Appointment, Warranty } from '@/types'
@@ -34,29 +34,31 @@ function AnimCountUp({
   const ref = useRef<HTMLSpanElement>(null)
   const fmtRef = useRef(format)
   fmtRef.current = format
+  const shouldReduceMotion = useReducedMotion()
+
   useEffect(() => {
+    if (shouldReduceMotion) {
+      if (ref.current) ref.current.textContent = fmtRef.current(to)
+      return
+    }
     const c = animate(0, to, {
       duration: 1.4,
       ease: [0.16, 1, 0.3, 1],
       onUpdate(v) { if (ref.current) ref.current.textContent = fmtRef.current(v) },
     })
     return c.stop
-  }, [to])
+  }, [to, shouldReduceMotion])
   return <span ref={ref}>{format(0)}</span>
 }
 
-// ── TiltCard — depth-gallery tilt + origami CSS-var spotlight ─────────────
+// ── TiltCard — quiet glass surface, cursor-driven 3D tilt only ────────────
 function TiltCard({
   children,
-  accentRgb,
   className = '',
-  style = {},
   href,
 }: {
   children: React.ReactNode
-  accentRgb: string
   className?: string
-  style?: React.CSSProperties
   href?: string
 }) {
   const mx = useMotionValue(0)
@@ -68,39 +70,22 @@ function TiltCard({
     const r = e.currentTarget.getBoundingClientRect()
     mx.set((e.clientX - r.left) / r.width - 0.5)
     my.set((e.clientY - r.top) / r.height - 0.5)
-    // Origami technique: CSS variable tracks cursor position for spotlight
-    e.currentTarget.style.setProperty('--mx', `${e.clientX - r.left}px`)
-    e.currentTarget.style.setProperty('--my', `${e.clientY - r.top}px`)
   }
 
   const handleLeave = () => {
-    animate(mx, 0, { duration: 0.65, ease: [0.16, 1, 0.3, 1] })
-    animate(my, 0, { duration: 0.65, ease: [0.16, 1, 0.3, 1] })
+    animate(mx, 0, { duration: 0.3, ease: [0.16, 1, 0.3, 1] })
+    animate(my, 0, { duration: 0.3, ease: [0.16, 1, 0.3, 1] })
   }
 
   const inner = (
     <motion.div
-      style={{ ...style, rotateX, rotateY, transformPerspective: 720, transformStyle: 'preserve-3d' }}
-      className={`relative rounded-2xl overflow-hidden cursor-pointer group ${className}`}
+      style={{ rotateX, rotateY, transformPerspective: 720, transformStyle: 'preserve-3d' }}
+      className={cn('glass rounded-2xl overflow-hidden cursor-pointer', className)}
       onMouseMove={handleMove}
       onMouseLeave={handleLeave}
-      whileHover={{ boxShadow: `0 20px 56px rgba(${accentRgb},0.18), 0 6px 20px rgba(0,0,0,0.7)` }}
-      transition={{ boxShadow: { duration: 0.2 } }}
+      whileHover={{ y: -2 }}
+      transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
     >
-      {/* Origami radial spotlight — follows cursor via CSS var */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-        style={{
-          background: `radial-gradient(320px circle at var(--mx, 50%) var(--my, 50%), rgba(${accentRgb},0.13), transparent 58%)`,
-        }}
-      />
-      {/* Depth-gallery top accent glow line */}
-      <div
-        className="absolute top-0 left-4 right-4 h-px pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-        style={{
-          background: `linear-gradient(90deg, transparent, rgba(${accentRgb},0.6), transparent)`,
-        }}
-      />
       {children}
     </motion.div>
   )
@@ -111,13 +96,7 @@ function TiltCard({
 // ── WidgetCard ─────────────────────────────────────────────────────────────
 function WidgetCard({ children }: { children: React.ReactNode }) {
   return (
-    <div
-      className="rounded-2xl p-5 relative overflow-hidden h-full"
-      style={{
-        background: 'linear-gradient(145deg, rgba(14,14,22,0.96) 0%, rgba(9,9,16,0.94) 100%)',
-        border: '1px solid rgba(255,255,255,0.055)',
-      }}
-    >
+    <div className="glass rounded-2xl p-5 relative overflow-hidden h-full">
       {children}
     </div>
   )
@@ -136,8 +115,8 @@ function WidgetHeader({
   href: string
 }) {
   return (
-    <div className="flex items-center justify-between mb-3.5">
-      <div className="flex items-center gap-2.5">
+    <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center gap-3">
         <div
           className="w-7 h-7 rounded-lg flex items-center justify-center"
           style={{
@@ -157,7 +136,8 @@ function WidgetHeader({
       </div>
       <Link
         href={href}
-        className="text-[11px] text-[#3a3a55] hover:text-indigo-400 flex items-center gap-1 transition-colors group"
+        className="text-[11px] flex items-center gap-1 transition-colors group"
+        style={{ color: 'var(--text-muted)' }}
       >
         All
         <ArrowRight className="w-2.5 h-2.5 group-hover:translate-x-0.5 transition-transform" />
@@ -172,8 +152,8 @@ function DataRow({ index, children }: { index: number; children: React.ReactNode
     <motion.div
       initial={{ opacity: 0, x: -8, clipPath: 'inset(0 100% 0 0)' }}
       animate={{ opacity: 1, x: 0, clipPath: 'inset(0 0% 0 0)' }}
-      transition={{ delay: 0.28 + index * 0.042, duration: 0.36, ease: [0.16, 1, 0.3, 1] }}
-      className="group relative flex items-center px-3 py-2.5 rounded-xl hover:bg-white/[0.022] transition-colors"
+      transition={{ delay: 0.2 + index * 0.042, duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+      className="group relative flex items-center px-3 py-3 rounded-xl hover:bg-white/[0.022] transition-colors"
     >
       {/* Motion-path left-rail indicator — reveals on row hover */}
       <div
@@ -199,7 +179,7 @@ function EmptyWidget({
       >
         <Icon className="w-4 h-4" style={{ color: `rgba(${accentRgb},0.35)` }} />
       </div>
-      <p className="text-xs text-[#323248] font-medium">{text}</p>
+      <p className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>{text}</p>
     </div>
   )
 }
@@ -225,39 +205,6 @@ export function DashboardClient({
   const now = new Date()
   const nextWeek = addDays(now, 7)
 
-  // depth-gallery: two parallax layers with different sensitivity
-  const kpiRef = useRef<HTMLDivElement>(null)
-  const widgetRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    // depth-gallery: parallaxAmountX=0.16, parallaxSmoothing=0.08
-    let tX = 0, tY = 0, cX = 0, cY = 0
-    let raf: number
-
-    const onMove = (e: MouseEvent) => {
-      tX = (e.clientX / window.innerWidth - 0.5) * 18
-      tY = (e.clientY / window.innerHeight - 0.5) * 10
-    }
-
-    const tick = () => {
-      cX += (tX - cX) * 0.07   // depth-gallery smoothing factor
-      cY += (tY - cY) * 0.07
-      // KPI cards (near layer) — depth-gallery depthInfluence near
-      if (kpiRef.current) {
-        kpiRef.current.style.transform = `translate(${cX}px, ${cY * 0.7}px)`
-      }
-      // Widgets (far layer) — depth-gallery depthInfluence far
-      if (widgetRef.current) {
-        widgetRef.current.style.transform = `translate(${cX * 0.35}px, ${cY * 0.25}px)`
-      }
-      raf = requestAnimationFrame(tick)
-    }
-
-    window.addEventListener('mousemove', onMove, { passive: true })
-    raf = requestAnimationFrame(tick)
-    return () => { window.removeEventListener('mousemove', onMove); cancelAnimationFrame(raf) }
-  }, [])
-
   // ── Derived data ─────────────────────────────────────────────────────────
   const monthlySubCost = subscriptions.reduce((s, sub) => s + monthlyCost(sub.amount, sub.billing_cycle), 0)
   const expiringThisWeek = [
@@ -274,6 +221,9 @@ export function DashboardClient({
   const recentDocs = documents.slice(0, 4)
   const unpaidBills = bills.filter(b => !b.paid).slice(0, 4)
   const expiringWarranties = warranties.filter(w => isExpiringSoon(w.expiry_date, 60)).slice(0, 4)
+
+  // Barometer signature — the glass orb's tint reads this score directly.
+  const urgencyScore = Math.min(1, overdueDeadlines.length * 0.35 + expiringThisWeek * 0.15)
 
   const kpis = [
     {
@@ -319,339 +269,325 @@ export function DashboardClient({
   })
 
   return (
-    <div className="space-y-6 relative">
+    <MotionConfig reducedMotion="user">
+      <div className="space-y-6 relative">
 
-      {/* ── Header ───────────────────────────────────────────────────── */}
-      <motion.div
-        initial={{ opacity: 0, y: 18 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className="relative flex items-start justify-between gap-4"
-      >
-        {/* Left: greeting */}
-        <div className="relative z-10 min-w-0">
-          <p
-            className="text-[11px] font-mono text-[#333350] tracking-widest uppercase mb-2"
-          >
-            {todayLabel}
-          </p>
-          <h1
-            className="text-[28px] font-bold text-[#e8e8f0] tracking-tight leading-tight"
-            style={{ fontFamily: 'var(--font-display, Syne, sans-serif)' }}
-          >
-            {greeting}, {name}
-          </h1>
-          <p className="text-sm mt-1.5 font-medium" style={{ color: '#42425a' }}>
-            {overdueDeadlines.length > 0 ? (
-              <span style={{ color: '#fb7185' }}>
-                {overdueDeadlines.length} overdue item{overdueDeadlines.length > 1 ? 's' : ''} need attention
-              </span>
-            ) : (
-              'Everything looks on track today'
-            )}
-          </p>
-        </div>
-
-        {/* Right: glass orb + CTA */}
-        <div className="flex items-center gap-3 shrink-0">
-          {/* ball-of-glass: R3F orb with MeshTransmissionMaterial */}
-          <div className="relative hidden md:block">
-            <div className="orb-glow" />
-            <GlassOrb className="w-[88px] h-[88px] -mt-5 -mr-1" />
+        {/* ── Header ───────────────────────────────────────────────────── */}
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="relative flex items-start justify-between gap-4"
+        >
+          {/* Left: greeting */}
+          <div className="relative z-10 min-w-0">
+            <p
+              className="text-[11px] font-mono tracking-widest uppercase mb-2"
+              style={{ color: 'var(--text-muted)' }}
+            >
+              {todayLabel}
+            </p>
+            <h1
+              className="text-[28px] font-bold text-[#e8e8f0] tracking-tight leading-tight"
+              style={{ fontFamily: 'var(--font-display, Syne, sans-serif)' }}
+            >
+              {greeting}, {name}
+            </h1>
+            <p className="text-sm mt-2 font-medium" style={{ color: 'var(--text-muted)' }}>
+              {overdueDeadlines.length > 0 ? (
+                <span style={{ color: '#fb7185' }}>
+                  {overdueDeadlines.length} overdue item{overdueDeadlines.length > 1 ? 's' : ''} need attention
+                </span>
+              ) : (
+                'Everything looks on track today'
+              )}
+            </p>
           </div>
 
-          <Link
-            href="/documents"
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white whitespace-nowrap transition-all hover:scale-[1.02] active:scale-[0.98]"
-            style={{
-              background: 'linear-gradient(135deg, #5b5ef4 0%, #7c3aed 100%)',
-              boxShadow: '0 4px 20px rgba(91,94,244,0.35)',
-              fontFamily: 'var(--font-display, Syne, sans-serif)',
-            }}
-          >
-            <Plus className="w-3.5 h-3.5" />
-            Add
-          </Link>
-        </div>
-      </motion.div>
+          {/* Right: barometer orb + CTA */}
+          <div className="flex items-center gap-3 shrink-0">
+            {/* ball-of-glass: R3F orb, tint reads urgencyScore — the signature element */}
+            <div className="relative hidden md:block">
+              <div className="orb-glow" />
+              <GlassOrb className="w-[88px] h-[88px] -mt-5 -mr-1" urgency={urgencyScore} />
+            </div>
 
-      {/* ── KPI Strip — depth-gallery near layer ─────────────────────── */}
-      <div
-        ref={kpiRef}
-        className="grid grid-cols-2 md:grid-cols-4 gap-3"
-        style={{ willChange: 'transform' }}
-      >
-        {kpis.map((kpi, i) => (
-          <motion.div
-            key={kpi.label}
-            initial={{ opacity: 0, y: 22, rotateX: 14 }}
-            animate={{ opacity: 1, y: 0, rotateX: 0 }}
-            transition={{
-              delay: i * 0.072,
-              duration: 0.55,
-              ease: [0.16, 1, 0.3, 1],
-            }}
-          >
-            <TiltCard
-              accentRgb={kpi.accentRgb}
-              href={kpi.href}
+            <Link
+              href="/documents"
+              className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold text-white whitespace-nowrap transition-transform hover:scale-[1.02] active:scale-[0.98]"
               style={{
-                background: 'linear-gradient(145deg, rgba(14,14,22,0.96) 0%, rgba(9,9,16,0.94) 100%)',
-                border: '1px solid rgba(255,255,255,0.058)',
+                background: 'linear-gradient(135deg, #5b5ef4 0%, #7c3aed 100%)',
+                boxShadow: '0 4px 20px rgba(91,94,244,0.35)',
+                fontFamily: 'var(--font-display, Syne, sans-serif)',
               }}
-              className="p-4"
             >
-              {/* Icon badge with ambient glow */}
-              <div
-                className="w-9 h-9 rounded-xl flex items-center justify-center mb-3.5 relative"
-                style={{
-                  background: `rgba(${kpi.accentRgb},0.1)`,
-                  border: `1px solid rgba(${kpi.accentRgb},0.18)`,
-                }}
-              >
-                {/* romantic-comfort: pulse glow behind icon */}
+              <Plus className="w-3.5 h-3.5" />
+              Add
+            </Link>
+          </div>
+        </motion.div>
+
+        {/* ── KPI Strip ────────────────────────────────────────────────── */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {kpis.map((kpi, i) => (
+            <motion.div
+              key={kpi.label}
+              initial={{ opacity: 0, y: 22, rotateX: 14 }}
+              animate={{ opacity: 1, y: 0, rotateX: 0 }}
+              transition={{
+                delay: i * 0.045,
+                duration: 0.4,
+                ease: [0.16, 1, 0.3, 1],
+              }}
+            >
+              <TiltCard href={kpi.href} className="p-4">
+                {/* Icon badge with ambient glow — the only color a card carries */}
                 <div
-                  className="absolute inset-0 rounded-xl animate-pulse-glow"
-                  style={{ background: `rgba(${kpi.accentRgb},0.1)` }}
-                />
-                <kpi.icon
-                  className="w-4 h-4 relative z-10"
-                  style={{ color: `rgb(${kpi.accentRgb})` }}
-                />
-              </div>
+                  className="w-9 h-9 rounded-xl flex items-center justify-center mb-4 relative"
+                  style={{
+                    background: `rgba(${kpi.accentRgb},0.1)`,
+                    border: `1px solid rgba(${kpi.accentRgb},0.18)`,
+                  }}
+                >
+                  <div
+                    className="absolute inset-0 rounded-xl animate-pulse-glow"
+                    style={{ background: `rgba(${kpi.accentRgb},0.1)` }}
+                  />
+                  <kpi.icon
+                    className="w-4 h-4 relative z-10"
+                    style={{ color: `rgb(${kpi.accentRgb})` }}
+                  />
+                </div>
 
-              {/* Value */}
-              <div
-                className="text-[22px] font-bold tabular-nums leading-none mb-1"
-                style={{
-                  color: kpi.valueColor,
-                  fontFamily: 'var(--font-mono, JetBrains Mono, monospace)',
-                }}
-              >
-                <AnimCountUp to={kpi.value} format={kpi.format} />
-              </div>
+                {/* Value — ledger voice: always monospace */}
+                <div
+                  className="text-[22px] font-bold tabular-nums leading-none mb-1"
+                  style={{
+                    color: kpi.valueColor,
+                    fontFamily: 'var(--font-mono, JetBrains Mono, monospace)',
+                  }}
+                >
+                  <AnimCountUp to={kpi.value} format={kpi.format} />
+                </div>
 
-              {/* Label */}
-              <div
-                className="text-[11px] font-medium leading-snug mt-1.5"
-                style={{ color: '#373752' }}
-              >
-                {kpi.label}
-              </div>
-            </TiltCard>
+                {/* Label */}
+                <div
+                  className="text-[11px] font-medium leading-snug mt-2"
+                  style={{ color: 'var(--text-muted)' }}
+                >
+                  {kpi.label}
+                </div>
+              </TiltCard>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* ── Widget Grid ──────────────────────────────────────────────── */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {/* Deadlines */}
+          <motion.div variants={staggerItem(0, 0.045)} initial="hidden" animate="show">
+            <WidgetCard>
+              <WidgetHeader icon={Calendar} accentRgb="251,113,133" title="Upcoming deadlines" href="/deadlines" />
+              {upcomingDeadlines.length === 0
+                ? <EmptyWidget icon={CheckCircle2} text="No upcoming deadlines" accentRgb="52,211,153" />
+                : <div className="space-y-0">
+                    {upcomingDeadlines.map((d, i) => {
+                      const days = getDaysUntil(d.due_date)
+                      return (
+                        <DataRow key={d.id} index={i}>
+                          <Link href="/deadlines" className="flex items-center w-full gap-3 min-w-0">
+                            <div className="flex-1 min-w-0">
+                              <p className="text-[13px] text-[#c4c4d8] font-medium truncate leading-tight">{d.title}</p>
+                              <p className="text-[11px] mt-1 font-mono" style={{ color: 'var(--text-muted)' }}>{formatDate(d.due_date)}</p>
+                            </div>
+                            <div className="flex items-center gap-2 ml-2 shrink-0">
+                              <span className={`text-[11px] font-mono font-bold ${getUrgencyColor(days)}`}>
+                                {days === 0 ? 'Today' : days < 0 ? `${Math.abs(days)}d late` : `${days}d`}
+                              </span>
+                              <span className={`text-[10px] px-2 py-1 rounded-full border ${getPriorityBadge(d.priority)}`}>
+                                {d.priority}
+                              </span>
+                            </div>
+                          </Link>
+                        </DataRow>
+                      )
+                    })}
+                  </div>
+              }
+            </WidgetCard>
           </motion.div>
-        ))}
-      </div>
 
-      {/* ── Widget Grid — depth-gallery far layer ────────────────────── */}
-      <div
-        ref={widgetRef}
-        className="grid grid-cols-1 lg:grid-cols-2 gap-4"
-        style={{ willChange: 'transform' }}
-      >
-        {/* Deadlines */}
-        <motion.div variants={staggerItem(4)} initial="hidden" animate="show">
-          <WidgetCard>
-            <WidgetHeader icon={Calendar} accentRgb="251,113,133" title="Upcoming deadlines" href="/deadlines" />
-            {upcomingDeadlines.length === 0
-              ? <EmptyWidget icon={CheckCircle2} text="No upcoming deadlines" accentRgb="52,211,153" />
-              : <div className="space-y-0">
-                  {upcomingDeadlines.map((d, i) => {
-                    const days = getDaysUntil(d.due_date)
-                    return (
-                      <DataRow key={d.id} index={i}>
-                        <Link href="/deadlines" className="flex items-center w-full gap-3 min-w-0">
-                          <div className="flex-1 min-w-0">
-                            <p className="text-[13px] text-[#c4c4d8] font-medium truncate leading-tight">{d.title}</p>
-                            <p className="text-[11px] mt-0.5 font-mono" style={{ color: '#363652' }}>{formatDate(d.due_date)}</p>
-                          </div>
-                          <div className="flex items-center gap-1.5 ml-2 shrink-0">
-                            <span className={`text-[11px] font-mono font-bold ${getUrgencyColor(days)}`}>
-                              {days === 0 ? 'Today' : days < 0 ? `${Math.abs(days)}d late` : `${days}d`}
-                            </span>
-                            <span className={`text-[10px] px-1.5 py-0.5 rounded-full border ${getPriorityBadge(d.priority)}`}>
-                              {d.priority}
+          {/* Subscriptions */}
+          <motion.div variants={staggerItem(1, 0.045)} initial="hidden" animate="show">
+            <WidgetCard>
+              <WidgetHeader icon={CreditCard} accentRgb="99,102,241" title="Active subscriptions" href="/subscriptions" />
+              {subscriptions.length === 0
+                ? <EmptyWidget icon={CreditCard} text="No subscriptions tracked" accentRgb="99,102,241" />
+                : <div className="space-y-0">
+                    {subscriptions.slice(0, 5).map((s, i) => {
+                      const days = getDaysUntil(s.next_renewal_date)
+                      return (
+                        <DataRow key={s.id} index={i}>
+                          <div className="flex items-center w-full gap-3 min-w-0">
+                            <div className="flex-1 min-w-0">
+                              <p className="text-[13px] text-[#c4c4d8] font-medium truncate leading-tight">{s.name}</p>
+                              <p className="text-[11px] mt-1 font-mono" style={{ color: 'var(--text-muted)' }}>Renews {formatDate(s.next_renewal_date)}</p>
+                            </div>
+                            <span
+                              className="text-[11px] font-mono font-bold ml-2 shrink-0"
+                              style={{ color: days <= 7 ? '#fbbf24' : 'var(--text-muted)' }}
+                            >
+                              ${monthlyCost(s.amount, s.billing_cycle).toFixed(2)}/mo
                             </span>
                           </div>
-                        </Link>
-                      </DataRow>
-                    )
-                  })}
-                </div>
-            }
-          </WidgetCard>
-        </motion.div>
+                        </DataRow>
+                      )
+                    })}
+                  </div>
+              }
+            </WidgetCard>
+          </motion.div>
 
-        {/* Subscriptions */}
-        <motion.div variants={staggerItem(5)} initial="hidden" animate="show">
-          <WidgetCard>
-            <WidgetHeader icon={CreditCard} accentRgb="99,102,241" title="Active subscriptions" href="/subscriptions" />
-            {subscriptions.length === 0
-              ? <EmptyWidget icon={CreditCard} text="No subscriptions tracked" accentRgb="99,102,241" />
-              : <div className="space-y-0">
-                  {subscriptions.slice(0, 5).map((s, i) => {
-                    const days = getDaysUntil(s.next_renewal_date)
-                    return (
-                      <DataRow key={s.id} index={i}>
-                        <div className="flex items-center w-full gap-3 min-w-0">
-                          <div className="flex-1 min-w-0">
-                            <p className="text-[13px] text-[#c4c4d8] font-medium truncate leading-tight">{s.name}</p>
-                            <p className="text-[11px] mt-0.5 font-mono" style={{ color: '#363652' }}>Renews {formatDate(s.next_renewal_date)}</p>
+          {/* Bills */}
+          <motion.div variants={staggerItem(2, 0.045)} initial="hidden" animate="show">
+            <WidgetCard>
+              <WidgetHeader icon={Receipt} accentRgb="251,191,36" title="Unpaid bills" href="/bills" />
+              {unpaidBills.length === 0
+                ? <EmptyWidget icon={CheckCircle2} text="All bills are paid" accentRgb="52,211,153" />
+                : <div className="space-y-0">
+                    {unpaidBills.map((b, i) => {
+                      const days = getDaysUntil(b.due_date)
+                      return (
+                        <DataRow key={b.id} index={i}>
+                          <div className="flex items-center w-full gap-3 min-w-0">
+                            <div className="flex-1 min-w-0">
+                              <p className="text-[13px] text-[#c4c4d8] font-medium truncate leading-tight">{b.name}</p>
+                              <p className="text-[11px] mt-1 font-mono" style={{ color: 'var(--text-muted)' }}>Due {formatDate(b.due_date)}</p>
+                            </div>
+                            <span className={`text-sm font-mono font-bold ml-2 shrink-0 ${getUrgencyColor(days)}`}>
+                              ${b.amount.toFixed(2)}
+                            </span>
                           </div>
-                          <span
-                            className="text-[11px] font-mono font-bold ml-2 shrink-0"
-                            style={{ color: days <= 7 ? '#fbbf24' : '#3a3a58' }}
-                          >
-                            ${monthlyCost(s.amount, s.billing_cycle).toFixed(2)}/mo
-                          </span>
-                        </div>
-                      </DataRow>
-                    )
-                  })}
-                </div>
-            }
-          </WidgetCard>
-        </motion.div>
+                        </DataRow>
+                      )
+                    })}
+                  </div>
+              }
+            </WidgetCard>
+          </motion.div>
 
-        {/* Bills */}
-        <motion.div variants={staggerItem(6)} initial="hidden" animate="show">
-          <WidgetCard>
-            <WidgetHeader icon={Receipt} accentRgb="251,191,36" title="Unpaid bills" href="/bills" />
-            {unpaidBills.length === 0
-              ? <EmptyWidget icon={CheckCircle2} text="All bills are paid" accentRgb="52,211,153" />
-              : <div className="space-y-0">
-                  {unpaidBills.map((b, i) => {
-                    const days = getDaysUntil(b.due_date)
-                    return (
-                      <DataRow key={b.id} index={i}>
-                        <div className="flex items-center w-full gap-3 min-w-0">
-                          <div className="flex-1 min-w-0">
-                            <p className="text-[13px] text-[#c4c4d8] font-medium truncate leading-tight">{b.name}</p>
-                            <p className="text-[11px] mt-0.5 font-mono" style={{ color: '#363652' }}>Due {formatDate(b.due_date)}</p>
-                          </div>
-                          <span className={`text-sm font-mono font-bold ml-2 shrink-0 ${getUrgencyColor(days)}`}>
-                            ${b.amount.toFixed(2)}
-                          </span>
-                        </div>
-                      </DataRow>
-                    )
-                  })}
-                </div>
-            }
-          </WidgetCard>
-        </motion.div>
-
-        {/* Documents */}
-        <motion.div variants={staggerItem(7)} initial="hidden" animate="show">
-          <WidgetCard>
-            <WidgetHeader icon={FileText} accentRgb="34,211,238" title="Recent documents" href="/documents" />
-            {recentDocs.length === 0
-              ? <EmptyWidget icon={FileText} text="No documents yet" accentRgb="34,211,238" />
-              : <div className="space-y-0">
-                  {recentDocs.map((doc, i) => (
-                    <DataRow key={doc.id} index={i}>
-                      <div className="flex items-center gap-3 w-full min-w-0">
-                        <div
-                          className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0"
-                          style={{ background: 'rgba(34,211,238,0.08)', border: '1px solid rgba(34,211,238,0.15)' }}
-                        >
-                          <FileText className="w-3.5 h-3.5 text-cyan-400" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-[13px] text-[#c4c4d8] font-medium truncate leading-tight">{doc.file_name}</p>
-                          <p className="text-[11px] font-mono mt-0.5" style={{ color: '#363652' }}>
-                            {doc.document_type}{doc.vendor_name ? ` · ${doc.vendor_name}` : ''}
-                          </p>
-                        </div>
-                        {doc.ai_extracted && (
-                          <span
-                            className="text-[10px] px-1.5 py-0.5 rounded-full shrink-0 font-mono"
-                            style={{ background: 'rgba(99,102,241,0.1)', color: '#818cf8', border: '1px solid rgba(99,102,241,0.2)' }}
-                          >
-                            AI
-                          </span>
-                        )}
-                      </div>
-                    </DataRow>
-                  ))}
-                </div>
-            }
-          </WidgetCard>
-        </motion.div>
-      </div>
-
-      {/* ── Bottom Row ───────────────────────────────────────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-
-        {/* Appointments */}
-        <motion.div variants={staggerItem(8)} initial="hidden" animate="show">
-          <WidgetCard>
-            <WidgetHeader icon={Clock} accentRgb="155,124,247" title="Upcoming appointments" href="/appointments" />
-            {upcomingAppointments.length === 0
-              ? <EmptyWidget icon={Clock} text="No upcoming appointments" accentRgb="155,124,247" />
-              : <div className="space-y-0">
-                  {upcomingAppointments.map((a, i) => (
-                    <DataRow key={a.id} index={i}>
-                      <div className="flex items-center gap-3 w-full">
-                        {/* Calendar badge — three-html-canvas html-overlay style */}
-                        <div
-                          className="rounded-xl px-2 py-1.5 text-center leading-tight shrink-0 min-w-[40px]"
-                          style={{ background: 'rgba(155,124,247,0.08)', border: '1px solid rgba(155,124,247,0.15)' }}
-                        >
-                          <div className="text-[9px] text-[#363652] font-mono uppercase tracking-wide">
-                            {new Date(a.date_time).toLocaleDateString('en', { month: 'short' })}
-                          </div>
+          {/* Documents */}
+          <motion.div variants={staggerItem(3, 0.045)} initial="hidden" animate="show">
+            <WidgetCard>
+              <WidgetHeader icon={FileText} accentRgb="34,211,238" title="Recent documents" href="/documents" />
+              {recentDocs.length === 0
+                ? <EmptyWidget icon={FileText} text="No documents yet" accentRgb="34,211,238" />
+                : <div className="space-y-0">
+                    {recentDocs.map((doc, i) => (
+                      <DataRow key={doc.id} index={i}>
+                        <div className="flex items-center gap-3 w-full min-w-0">
                           <div
-                            className="text-sm font-bold leading-tight"
-                            style={{ color: '#c4b5fd', fontFamily: 'var(--font-display, Syne, sans-serif)' }}
+                            className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0"
+                            style={{ background: 'rgba(34,211,238,0.08)', border: '1px solid rgba(34,211,238,0.15)' }}
                           >
-                            {new Date(a.date_time).getDate()}
+                            <FileText className="w-3.5 h-3.5 text-cyan-400" />
                           </div>
-                        </div>
-                        <div className="min-w-0">
-                          <p className="text-[13px] text-[#c4c4d8] font-medium leading-tight truncate">{a.title}</p>
-                          <p className="text-[11px] font-mono mt-0.5" style={{ color: '#363652' }}>
-                            {new Date(a.date_time).toLocaleTimeString('en', { hour: '2-digit', minute: '2-digit' })}
-                            {a.location ? ` · ${a.location}` : ''}
-                          </p>
-                        </div>
-                      </div>
-                    </DataRow>
-                  ))}
-                </div>
-            }
-          </WidgetCard>
-        </motion.div>
-
-        {/* Warranties */}
-        <motion.div variants={staggerItem(9)} initial="hidden" animate="show">
-          <WidgetCard>
-            <WidgetHeader icon={Package} accentRgb="52,211,153" title="Warranties expiring" href="/warranties" />
-            {expiringWarranties.length === 0
-              ? <EmptyWidget icon={CheckCircle2} text="No warranties expiring soon" accentRgb="52,211,153" />
-              : <div className="space-y-0">
-                  {expiringWarranties.map((w, i) => {
-                    const days = getDaysUntil(w.expiry_date)
-                    return (
-                      <DataRow key={w.id} index={i}>
-                        <div className="flex items-center w-full gap-3 min-w-0">
                           <div className="flex-1 min-w-0">
-                            <p className="text-[13px] text-[#c4c4d8] font-medium truncate leading-tight">{w.product_name}</p>
-                            <p className="text-[11px] font-mono mt-0.5" style={{ color: '#363652' }}>Expires {formatDate(w.expiry_date)}</p>
+                            <p className="text-[13px] text-[#c4c4d8] font-medium truncate leading-tight">{doc.file_name}</p>
+                            <p className="text-[11px] font-mono mt-1" style={{ color: 'var(--text-muted)' }}>
+                              {doc.document_type}{doc.vendor_name ? ` · ${doc.vendor_name}` : ''}
+                            </p>
                           </div>
-                          <span className={`text-[11px] font-mono font-bold shrink-0 tabular-nums ${getUrgencyColor(days)}`}>
-                            {days}d
-                          </span>
+                          {doc.ai_extracted && (
+                            <span
+                              className="text-[10px] px-2 py-1 rounded-full shrink-0 font-mono"
+                              style={{ background: 'rgba(99,102,241,0.1)', color: '#818cf8', border: '1px solid rgba(99,102,241,0.2)' }}
+                            >
+                              AI
+                            </span>
+                          )}
                         </div>
                       </DataRow>
-                    )
-                  })}
-                </div>
-            }
-          </WidgetCard>
-        </motion.div>
-      </div>
+                    ))}
+                  </div>
+              }
+            </WidgetCard>
+          </motion.div>
+        </div>
 
-    </div>
+        {/* ── Bottom Row ───────────────────────────────────────────────── */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+
+          {/* Appointments */}
+          <motion.div variants={staggerItem(4, 0.045)} initial="hidden" animate="show">
+            <WidgetCard>
+              <WidgetHeader icon={Clock} accentRgb="155,124,247" title="Upcoming appointments" href="/appointments" />
+              {upcomingAppointments.length === 0
+                ? <EmptyWidget icon={Clock} text="No upcoming appointments" accentRgb="155,124,247" />
+                : <div className="space-y-0">
+                    {upcomingAppointments.map((a, i) => (
+                      <DataRow key={a.id} index={i}>
+                        <div className="flex items-center gap-3 w-full">
+                          {/* Calendar badge — three-html-canvas html-overlay style */}
+                          <div
+                            className="rounded-xl px-2 py-2 text-center leading-tight shrink-0 min-w-[40px]"
+                            style={{ background: 'rgba(155,124,247,0.08)', border: '1px solid rgba(155,124,247,0.15)' }}
+                          >
+                            <div className="text-[9px] font-mono uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>
+                              {new Date(a.date_time).toLocaleDateString('en', { month: 'short' })}
+                            </div>
+                            <div
+                              className="text-sm font-bold leading-tight"
+                              style={{ color: '#c4b5fd', fontFamily: 'var(--font-mono, JetBrains Mono, monospace)' }}
+                            >
+                              {new Date(a.date_time).getDate()}
+                            </div>
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-[13px] text-[#c4c4d8] font-medium leading-tight truncate">{a.title}</p>
+                            <p className="text-[11px] font-mono mt-1" style={{ color: 'var(--text-muted)' }}>
+                              {new Date(a.date_time).toLocaleTimeString('en', { hour: '2-digit', minute: '2-digit' })}
+                              {a.location ? ` · ${a.location}` : ''}
+                            </p>
+                          </div>
+                        </div>
+                      </DataRow>
+                    ))}
+                  </div>
+              }
+            </WidgetCard>
+          </motion.div>
+
+          {/* Warranties */}
+          <motion.div variants={staggerItem(5, 0.045)} initial="hidden" animate="show">
+            <WidgetCard>
+              <WidgetHeader icon={Package} accentRgb="52,211,153" title="Warranties expiring" href="/warranties" />
+              {expiringWarranties.length === 0
+                ? <EmptyWidget icon={CheckCircle2} text="No warranties expiring soon" accentRgb="52,211,153" />
+                : <div className="space-y-0">
+                    {expiringWarranties.map((w, i) => {
+                      const days = getDaysUntil(w.expiry_date)
+                      return (
+                        <DataRow key={w.id} index={i}>
+                          <div className="flex items-center w-full gap-3 min-w-0">
+                            <div className="flex-1 min-w-0">
+                              <p className="text-[13px] text-[#c4c4d8] font-medium truncate leading-tight">{w.product_name}</p>
+                              <p className="text-[11px] font-mono mt-1" style={{ color: 'var(--text-muted)' }}>Expires {formatDate(w.expiry_date)}</p>
+                            </div>
+                            <span className={`text-[11px] font-mono font-bold shrink-0 tabular-nums ${getUrgencyColor(days)}`}>
+                              {days}d
+                            </span>
+                          </div>
+                        </DataRow>
+                      )
+                    })}
+                  </div>
+              }
+            </WidgetCard>
+          </motion.div>
+        </div>
+
+      </div>
+    </MotionConfig>
   )
 }
