@@ -18,7 +18,7 @@ export default async function DashboardPage() {
     supabase.from('subscriptions').select('*').eq('user_id', user!.id).eq('status', 'active'),
     supabase.from('deadlines').select('*').eq('user_id', user!.id).eq('status', 'pending').order('due_date'),
     supabase.from('documents').select('*').eq('user_id', user!.id),
-    supabase.from('bills').select('*').eq('user_id', user!.id).eq('paid', false),
+    supabase.from('bills').select('*').eq('user_id', user!.id),
     supabase.from('appointments').select('*').eq('user_id', user!.id).order('date_time'),
     supabase.from('warranties').select('*').eq('user_id', user!.id),
   ])

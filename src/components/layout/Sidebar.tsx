@@ -283,17 +283,93 @@ export function Sidebar() {
         )}
       </AnimatePresence>
 
-      {/* Desktop sidebar */}
+      {/* Desktop sidebar — floating icon-only capsule */}
       <div
-        className="hidden lg:flex w-60 shrink-0 h-full flex-col"
+        className="hidden lg:flex flex-col items-center justify-between w-[72px] shrink-0 h-[calc(100%-2rem)] my-4 ml-4 rounded-full py-6 relative"
         style={{
-          background: 'rgba(4,4,10,0.8)',
-          backdropFilter: 'blur(28px)',
-          WebkitBackdropFilter: 'blur(28px)',
-          borderRight: '1px solid rgba(255,255,255,0.05)',
+          background: 'rgba(8,8,14,0.75)',
+          backdropFilter: 'blur(28px) saturate(1.4)',
+          WebkitBackdropFilter: 'blur(28px) saturate(1.4)',
+          border: '1px solid rgba(255,255,255,0.06)',
         }}
       >
-        {sidebarInner}
+        {/* Logo mark */}
+        <Link
+          href="/dashboard"
+          aria-label="Dashboard home"
+          className="relative w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-700 flex items-center justify-center shrink-0 shadow-lg shadow-indigo-500/25"
+        >
+          <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+            <circle cx="7" cy="7" r="3" fill="white" opacity="0.9" />
+            <circle cx="7" cy="7" r="6" stroke="white" strokeWidth="1.2" opacity="0.4" />
+          </svg>
+        </Link>
+
+        {/* Icon-only nav */}
+        <nav className="flex flex-col items-center gap-3">
+          {navItems.map((item) => {
+            const active = pathname === item.href || (item.href !== '/dashboard' && pathname.startsWith(item.href))
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                aria-label={item.label}
+                title={item.label}
+                className={cn(
+                  'relative w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-150',
+                  active ? 'text-white' : 'text-[#5a5a72] hover:text-[#c4c4d8] hover:bg-white/[0.05]'
+                )}
+              >
+                {active && (
+                  <motion.div
+                    layoutId="capsule-active-badge"
+                    className="absolute inset-0 rounded-full"
+                    style={{
+                      background: 'linear-gradient(135deg, #f3924f, #d9622c)',
+                      boxShadow: '0 0 14px rgba(226,121,61,0.45)',
+                    }}
+                    transition={{ type: 'spring', stiffness: 380, damping: 28 }}
+                  />
+                )}
+                <item.icon className="w-4 h-4 relative z-10" />
+              </Link>
+            )
+          })}
+        </nav>
+
+        {/* Settings + sign out */}
+        <div className="flex flex-col items-center gap-2">
+          <Link
+            href="/settings"
+            aria-label="Settings"
+            title="Settings"
+            className={cn(
+              'relative w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-150',
+              pathname === '/settings' ? 'text-white' : 'text-[#5a5a72] hover:text-[#c4c4d8] hover:bg-white/[0.05]'
+            )}
+          >
+            {pathname === '/settings' && (
+              <motion.div
+                layoutId="capsule-active-badge"
+                className="absolute inset-0 rounded-full"
+                style={{
+                  background: 'linear-gradient(135deg, #f3924f, #d9622c)',
+                  boxShadow: '0 0 14px rgba(226,121,61,0.45)',
+                }}
+                transition={{ type: 'spring', stiffness: 380, damping: 28 }}
+              />
+            )}
+            <Settings className="w-4 h-4 relative z-10" />
+          </Link>
+          <button
+            onClick={handleLogout}
+            aria-label="Sign out"
+            title="Sign out"
+            className="w-10 h-10 rounded-full flex items-center justify-center text-[#5a5a72] hover:text-red-400 hover:bg-red-500/10 transition-colors"
+          >
+            <LogOut className="w-4 h-4" />
+          </button>
+        </div>
       </div>
     </>
   )

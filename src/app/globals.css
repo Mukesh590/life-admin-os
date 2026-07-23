@@ -47,6 +47,13 @@
     --rose: #fb7185;
     --emerald: #34d399;
 
+    /* Warm single-accent — /dashboard glassmorphism redesign only.
+       Used exactly where the reference uses its accent: sidebar active badge,
+       forecast chart primary line, progress bars, mini bar chart. Nowhere else. */
+    --warm-orange: #e2793d;
+    --warm-orange-bright: #f3924f;
+    --warm-orange-deep: #a4491f;
+
     /* Domain-locked accent palette (Life Admin OS) — same values, named for
        what they track rather than what they look like. */
     --ledger-indigo: #5b5ef4;   /* subscriptions, primary actions */
@@ -310,4 +317,24 @@ body::after {
     radial-gradient(ellipse 50% 40% at 80% 70%, rgba(155,124,247,0.05) 0%, transparent 60%),
     radial-gradient(ellipse 40% 30% at 50% 90%, rgba(34,211,238,0.04) 0%, transparent 60%),
     #07070e;
+}
+
+/* Warm ambient placeholder — /dashboard page background only.
+   Swap for a real photo later via one inline `backgroundImage` on this element. */
+.dashboard-warm-bg {
+  background:
+    radial-gradient(ellipse 55% 45% at 15% 15%, rgba(226,121,61,0.22) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 90% 10%, rgba(180,90,40,0.16) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 55% at 50% 105%, rgba(120,60,30,0.20) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 35% at 100% 60%, rgba(226,121,61,0.10) 0%, transparent 60%),
+    #0e0a08;
+  background-size: cover;
+  background-position: center;
+}
+
+/* Opaque textured surface — the one solid (non-glass) card material,
+   reserved for the single "featured/urgent" highlight card. */
+.surface-opaque-warm {
+  background: linear-gradient(155deg, #2a1c14 0%, #17110c 100%);
+  border: 1px solid rgba(255,255,255,0.07);
 }
