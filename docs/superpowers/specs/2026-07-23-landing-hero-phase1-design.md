@@ -84,3 +84,7 @@ Before reporting Phase 1 done:
 - Confirm no layout shift/jank at the crossfade moment.
 - Confirm `prefers-reduced-motion` disables/shortens the entrance and scroll-dive appropriately.
 - Confirm default system cursor throughout (no custom cursor code left over from the old page).
+
+## Follow-ups (not Phase 1 scope)
+
+- Mobile phone-screen zoom currently dives into a blank/gradient placeholder (§4). Revisit once mobile-specific screen content exists, and reconsider whether mobile should get the full scroll-dive at all — a simpler, non-pinned entrance may suit small screens better than a scaled-down dive.

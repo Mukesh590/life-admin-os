@@ -113,6 +113,14 @@
     }
   }
 
+  /* Landing page ('/') keeps the default system cursor — it does not mount
+     CustomCursor, so this overrides the global `cursor: none` rule above. */
+  .landing-root,
+  .landing-root a,
+  .landing-root button {
+    cursor: auto !important;
+  }
+
   ::-webkit-scrollbar {
     width: 3px;
     height: 3px;
