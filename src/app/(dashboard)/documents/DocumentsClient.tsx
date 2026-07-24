@@ -1,18 +1,22 @@
 'use client'
 
 import { useState, useRef } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { formatDate, getCategoryColor } from '@/lib/utils'
 import type { Document as DocType, AIExtractionResult } from '@/types'
 import { Upload, FileText, Brain, Trash2, CheckCircle2, AlertCircle, Search, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { staggerContainer, fadeUp } from '@/lib/motion'
+import { UrgencyBadge } from '@/components/dashboard/UrgencyBadge'
 
 type Props = { initialData: DocType[]; userId: string }
 
 const glass = 'bg-[#111118] border border-white/[0.06]'
 
 export function DocumentsClient({ initialData, userId }: Props) {
+  const searchParams = useSearchParams()
+  const captureTitle = searchParams.get('captureTitle')
   const [docs, setDocs] = useState<DocType[]>(initialData)
   const [uploading, setUploading] = useState(false)
   const [extracting, setExtracting] = useState(false)
@@ -136,6 +140,16 @@ export function DocumentsClient({ initialData, userId }: Props) {
         </button>
         <input ref={fileRef} type="file" accept=".pdf,.png,.jpg,.jpeg" onChange={handleFileUpload} className="hidden" aria-label="Upload document" />
       </motion.div>
+
+      {captureTitle && (
+        <div className="flex flex-col gap-3 rounded-xl border border-amber-500/20 bg-amber-500/[0.05] p-4 sm:flex-row sm:items-center">
+          <FileText className="h-5 w-5 shrink-0 text-amber-300" />
+          <p className="flex-1 text-sm text-amber-100">Upload supporting documentation for <strong>{captureTitle}</strong>.</p>
+          <button onClick={() => fileRef.current?.click()} className="min-h-11 rounded-lg bg-amber-400/15 px-4 text-sm font-semibold text-amber-200 hover:bg-amber-400/25 focus:outline-none focus:ring-2 focus:ring-amber-300">
+            Choose file
+          </button>
+        </div>
+      )}
 
       {error && (
         <div className="flex items-center gap-3 p-4 rounded-xl border border-red-500/20 bg-red-500/[0.05]">
@@ -284,7 +298,11 @@ export function DocumentsClient({ initialData, userId }: Props) {
               {doc.vendor_name && <p className="text-xs text-zinc-600 mb-0.5">Vendor: <span className="text-zinc-400">{doc.vendor_name}</span></p>}
               {doc.amount && <p className="text-xs text-zinc-600 mb-0.5">Amount: <span className="text-zinc-400">${doc.amount}</span></p>}
               {doc.key_date && <p className="text-xs text-zinc-600 mb-0.5">Key date: <span className="text-zinc-400">{formatDate(doc.key_date)}</span></p>}
-              {doc.expiry_date && <p className="text-xs text-amber-400 font-medium">Expires: {formatDate(doc.expiry_date)}</p>}
+              {doc.expiry_date && (
+                <div className="mt-2">
+                  <UrgencyBadge date={doc.expiry_date} />
+                </div>
+              )}
               <a href={doc.file_url} target="_blank" rel="noopener noreferrer" className="mt-3 text-xs text-indigo-400 hover:text-indigo-300 inline-flex items-center gap-1 transition-colors">
                 View file
               </a>

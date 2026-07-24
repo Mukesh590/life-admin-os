@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 import type { Appointment } from '@/types'
@@ -8,6 +9,7 @@ import { Plus, Clock, Trash2, Edit2, MapPin, Calendar, X } from 'lucide-react'
 import { isAfter, isBefore, format } from 'date-fns'
 import { motion, AnimatePresence } from 'framer-motion'
 import { staggerContainer, fadeUp, spring } from '@/lib/motion'
+import { UrgencyBadge } from '@/components/dashboard/UrgencyBadge'
 
 type Props = { initialData: Appointment[]; userId: string }
 
@@ -16,11 +18,23 @@ const inputCls = 'w-full px-3 py-2.5 rounded-lg bg-white/[0.03] border border-wh
 const labelCls = 'block text-xs font-medium text-zinc-500 mb-1.5 uppercase tracking-wide'
 
 export function AppointmentsClient({ initialData, userId }: Props) {
+  const searchParams = useSearchParams()
   const [apts, setApts] = useState<Appointment[]>(initialData)
   const [showForm, setShowForm] = useState(false)
   const [editing, setEditing] = useState<Appointment | null>(null)
   const [loading, setLoading] = useState(false)
   const [form, setForm] = useState({ title: '', date_time: '', location: '', notes: '' })
+
+  useEffect(() => {
+    const title = searchParams.get('captureTitle')
+    if (!title) return
+    setForm(current => ({
+      ...current,
+      title,
+      notes: searchParams.get('captureNote') || '',
+    }))
+    setShowForm(true)
+  }, [searchParams])
   const [tab, setTab] = useState<'upcoming' | 'past'>('upcoming')
 
   const supabase = createClient()
@@ -141,6 +155,7 @@ export function AppointmentsClient({ initialData, userId }: Props) {
                   </div>
                   {a.notes && <p className="text-xs text-zinc-600 mt-1">{a.notes}</p>}
                 </div>
+                <UrgencyBadge date={a.date_time} complete={tab === 'past'} className="shrink-0" />
                 <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
                   <button onClick={() => openEdit(a)} className="p-1.5 rounded-lg hover:bg-white/[0.08] text-zinc-600 hover:text-zinc-200 transition-colors" aria-label="Edit"><Edit2 className="w-3.5 h-3.5" /></button>
                   <button onClick={() => handleDelete(a.id)} className="p-1.5 rounded-lg hover:bg-red-500/10 text-zinc-600 hover:text-red-400 transition-colors" aria-label="Delete"><Trash2 className="w-3.5 h-3.5" /></button>

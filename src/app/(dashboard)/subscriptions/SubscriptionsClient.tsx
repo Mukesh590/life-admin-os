@@ -1,12 +1,14 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { formatCurrency, formatDate, getDaysUntil, getCategoryColor, monthlyCost, annualCost, cn } from '@/lib/utils'
 import type { Subscription } from '@/types'
 import { Plus, CreditCard, Trash2, Edit2, TrendingUp, AlertCircle, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { staggerContainer, fadeUp, spring } from '@/lib/motion'
+import { UrgencyBadge } from '@/components/dashboard/UrgencyBadge'
 
 const CATEGORIES = ['Entertainment', 'Software', 'Utilities', 'Health', 'Education', 'Financial', 'Other']
 const BILLING_CYCLES = ['monthly', 'annual', 'weekly', 'quarterly'] as const
@@ -18,6 +20,7 @@ const inputCls = 'w-full px-3 py-2.5 rounded-lg bg-white/[0.03] border border-wh
 const labelCls = 'block text-xs font-medium text-zinc-500 mb-1.5 uppercase tracking-wide'
 
 export function SubscriptionsClient({ initialData, userId }: Props) {
+  const searchParams = useSearchParams()
   const [subs, setSubs] = useState<Subscription[]>(initialData)
   const [showForm, setShowForm] = useState(false)
   const [editing, setEditing] = useState<Subscription | null>(null)
@@ -28,6 +31,18 @@ export function SubscriptionsClient({ initialData, userId }: Props) {
     name: '', amount: '', currency: 'USD', billing_cycle: 'monthly' as typeof BILLING_CYCLES[number],
     next_renewal_date: '', category: 'Other', status: 'active', cancel_reminder: false, notes: '',
   })
+
+  useEffect(() => {
+    const title = searchParams.get('captureTitle')
+    if (!title) return
+    setForm(current => ({
+      ...current,
+      name: title,
+      notes: searchParams.get('captureNote') || '',
+      next_renewal_date: searchParams.get('captureDue') || '',
+    }))
+    setShowForm(true)
+  }, [searchParams])
 
   const supabase = createClient()
 
@@ -188,6 +203,7 @@ export function SubscriptionsClient({ initialData, userId }: Props) {
                     <span className="text-xs text-zinc-600">/{sub.billing_cycle === 'annual' ? 'yr' : sub.billing_cycle === 'monthly' ? 'mo' : sub.billing_cycle}</span>
                   </div>
                   <div className="text-xs text-zinc-600 mt-0.5 font-mono">{formatCurrency(monthlyCost(sub.amount, sub.billing_cycle))}/mo</div>
+                  {sub.status === 'active' && <UrgencyBadge date={sub.next_renewal_date} className="mt-1.5" />}
                 </div>
                 <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity ml-1">
                   <button onClick={() => openEdit(sub)} className="p-1.5 rounded-lg hover:bg-white/[0.08] text-zinc-600 hover:text-zinc-200 transition-colors" aria-label="Edit">

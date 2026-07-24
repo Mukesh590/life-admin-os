@@ -6,8 +6,9 @@ import { motion, MotionConfig, useReducedMotion, animate } from 'framer-motion'
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis } from 'recharts'
 import { staggerItem } from '@/lib/motion'
 import { formatDate, getDaysUntil, getGreeting, monthlyCost } from '@/lib/utils'
-import type { Subscription, Deadline, Document, Bill, Appointment, Warranty } from '@/types'
+import type { Subscription, Deadline, Document, Bill, Appointment, Warranty, DashboardFeatureData } from '@/types'
 import type { User } from '@supabase/supabase-js'
+import { ProductivityDashboard } from '@/components/dashboard/ProductivityDashboard'
 import {
   CreditCard, Calendar, FileText, Receipt, Bell, MoreVertical,
   CheckCircle2, ArrowRight, Plus,
@@ -103,6 +104,7 @@ type Props = {
   bills: Bill[]
   appointments: Appointment[]
   warranties: Warranty[]
+  featureData: DashboardFeatureData
 }
 
 const LEGEND_COLORS = ['#2dd4bf', '#34d399', '#fb7185']
@@ -113,7 +115,7 @@ function capitalize(s: string) {
 
 // ── DashboardClient ────────────────────────────────────────────────────────
 export function DashboardClient({
-  user, profile, subscriptions, deadlines, documents, bills, warranties,
+  user, profile, subscriptions, deadlines, documents, bills, appointments, warranties, featureData,
 }: Props) {
   const name = profile?.full_name?.split(' ')[0] || user.email?.split('@')[0] || 'there'
   const greeting = getGreeting()
@@ -300,6 +302,17 @@ export function DashboardClient({
               )}
             </p>
           </motion.div>
+
+          <ProductivityDashboard
+            userId={user.id}
+            subscriptions={subscriptions}
+            deadlines={deadlines}
+            documents={documents}
+            bills={bills}
+            appointments={appointments}
+            warranties={warranties}
+            initialFeatureData={featureData}
+          />
 
           {/* ── Main 2-column band: left stack / right profile card ──── */}
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-4 items-stretch">

@@ -35,7 +35,11 @@ export function SettingsClient({ user, profile }: Props) {
   }
 
   async function handleExport() {
-    const tables = ['subscriptions', 'deadlines', 'documents', 'bills', 'appointments', 'warranties']
+    const tables = [
+      'subscriptions', 'deadlines', 'documents', 'bills', 'appointments', 'warranties',
+      'quick_inbox_items', 'category_budgets', 'weekly_focus_notes',
+      'item_completion_events', 'item_activity_events', 'weekly_report_cache',
+    ]
     const allData: Record<string, unknown[]> = {}
     for (const table of tables) {
       const { data } = await supabase.from(table).select('*').eq('user_id', user.id)
@@ -53,12 +57,17 @@ export function SettingsClient({ user, profile }: Props) {
   async function handleDeleteAccount() {
     if (deleteConfirm !== 'DELETE') return
     setDeleting(true)
-    const tables = ['subscriptions', 'deadlines', 'documents', 'bills', 'appointments', 'warranties', 'users_profile']
+    const tables = [
+      'weekly_report_cache', 'item_activity_events', 'item_completion_events',
+      'weekly_focus_notes', 'category_budgets', 'quick_inbox_items',
+      'subscriptions', 'deadlines', 'documents', 'bills', 'appointments',
+      'warranties', 'users_profile',
+    ]
     for (const table of tables) {
       if (table === 'users_profile') {
         await supabase.from(table).delete().eq('id', user.id)
       } else {
-        await supabase.from(table as 'subscriptions').delete().eq('user_id', user.id)
+        await supabase.from(table).delete().eq('user_id', user.id)
       }
     }
     await supabase.auth.signOut()
@@ -114,7 +123,7 @@ export function SettingsClient({ user, profile }: Props) {
           <Download className="w-5 h-5 text-emerald-400" />
           <h2 className="text-sm font-semibold text-slate-200">Export your data</h2>
         </div>
-        <p className="text-sm text-slate-400 mb-4">Download all your data as a JSON file. This includes subscriptions, deadlines, documents, bills, appointments, and warranties.</p>
+        <p className="text-sm text-slate-400 mb-4">Download your entity records plus inbox, focus, budget, completion, activity, and report data as JSON.</p>
         <button
           onClick={handleExport}
           className="flex items-center gap-2 bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 border border-emerald-500/20 px-5 py-2 rounded-lg text-sm font-medium transition-colors"

@@ -102,3 +102,85 @@ export type AIExtractionResult = {
   category: string
   confidence_score: number
 }
+
+export type QuickInboxItem = {
+  id: string
+  user_id: string
+  title: string
+  note: string | null
+  category: string | null
+  due_date: string | null
+  state: 'inbox' | 'processed'
+  processed_into_type: 'deadline' | 'bill' | 'document' | 'subscription' | 'appointment' | 'warranty' | null
+  processed_into_id: string | null
+  processed_at: string | null
+  created_at: string
+  updated_at: string
+}
+
+export type CategoryBudget = {
+  id: string
+  user_id: string
+  category: string
+  month_start: string
+  monthly_cap: number
+  rollover_enabled: boolean
+  created_at: string
+  updated_at: string
+}
+
+export type WeeklyFocusNote = {
+  id: string
+  user_id: string
+  week_start: string
+  focus_text: string
+  created_at: string
+  updated_at: string
+}
+
+export type CompletionEvent = {
+  id: string
+  user_id: string
+  item_type: 'deadline' | 'bill' | 'subscription' | 'appointment' | 'warranty' | 'inbox'
+  item_id: string
+  occurrence_date: string
+  due_at: string | null
+  completed_at: string
+  created_at: string
+  updated_at: string
+}
+
+export type ItemActivityEvent = {
+  id: string
+  user_id: string
+  item_type: 'deadline' | 'bill' | 'subscription' | 'appointment' | 'warranty' | 'inbox'
+  item_id: string
+  event_type: 'postponed' | 'workflow_status_changed'
+  from_due_at: string | null
+  to_due_at: string | null
+  metadata: Record<string, unknown>
+  created_at: string
+  updated_at: string
+}
+
+export type WeeklyReportCache = {
+  id: string
+  user_id: string
+  week_start: string
+  report_text: string
+  source_snapshot: Record<string, unknown>
+  generated_at: string
+  created_at: string
+  updated_at: string
+}
+
+export type DashboardFeatureData = {
+  inboxItems: QuickInboxItem[]
+  budgets: CategoryBudget[]
+  previousBudgets: CategoryBudget[]
+  weeklyFocus: WeeklyFocusNote | null
+  completionEvents: CompletionEvent[]
+  activityEvents: ItemActivityEvent[]
+  latestReport: WeeklyReportCache | null
+  migrationReady: boolean
+}
