@@ -67,20 +67,20 @@ export default function LandingPage() {
           const entrance = gsap.timeline({ delay: reduceMotion ? 0 : 0.15 })
 
           if (reduceMotion) {
-            entrance.set(['.hero-photo', '.hero-watermark', '.landing-nav'], { autoAlpha: 1, y: 0 })
+            entrance.set(['.hero-photo', '.landing-nav', '.landing-hero-utility'], { autoAlpha: 1, y: 0 })
           } else {
             entrance
               .fromTo('.hero-photo', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5, ease: 'power1.out' })
               .fromTo(
-                '.hero-watermark',
-                { autoAlpha: 0 },
-                { autoAlpha: 1, duration: 0.4, ease: 'power1.out' },
-                '-=0.15'
-              )
-              .fromTo(
                 '.landing-nav',
                 { autoAlpha: 0, y: -12 },
                 { autoAlpha: 1, y: 0, duration: 0.3, ease: 'power2.out' },
+                '-=0.15'
+              )
+              .fromTo(
+                '.landing-hero-utility',
+                { autoAlpha: 0 },
+                { autoAlpha: 1, duration: 0.3, ease: 'power2.out' },
                 '-=0.15'
               )
           }
@@ -141,7 +141,7 @@ export default function LandingPage() {
           })
 
           diveTl
-            .to('.landing-nav, .hero-watermark', { autoAlpha: 0, duration: 0.25, ease: 'none' }, 0)
+            .to('.landing-nav, .landing-hero-utility', { autoAlpha: 0, duration: 0.25, ease: 'none' }, 0)
             .to(wrapper, { scale: scaleNeeded, x: dx, y: dy, duration: 1, ease: 'none' }, 0)
 
           gsap.fromTo(
@@ -191,32 +191,46 @@ export default function LandingPage() {
           </picture>
         </div>
 
-        {/* Large watermark wordmark — deliberate brand moment, Bitfalk-style:
-            bold, very low-opacity, anchored just below the nav so it never
-            collides with it. Sized to fit within the viewport with margin on
-            both sides, and small enough that its box clears the headline
-            baked into the laptop screen below (which starts a bit into the
-            screen, not at its very top edge) — sits above the photo, below
-            the functional nav. Distinct from "Sign in" in the nav itself. */}
-        <div className="hero-watermark opacity-0 absolute top-16 md:top-20 left-0 right-0 px-8 md:px-16 pointer-events-none select-none z-10">
-          <span className="block text-center font-display font-black tracking-tight text-[#0a0a0a]/[0.10] text-[8vw] md:text-[4.5vw] leading-none whitespace-nowrap">
-            Life AdminOS
-          </span>
-        </div>
-
-        {/* Minimal nav, top corner — just "Sign in"; the small wordmark was
-            removed since it read as redundant against the watermark behind
-            it. */}
+        {/* Minimal nav — small wordmark top-left, "Sign in" top-right, both
+            anchored to the shared 12-column grid instead of independent
+            offsets. No CTA, no other links. */}
         <nav className="landing-nav absolute top-0 inset-x-0 z-20">
-          <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-end">
+          <div className="landing-hero-grid h-16 items-center">
+            <Link
+              href="/"
+              className="[grid-column:1/4] justify-self-start font-display font-semibold text-sm tracking-tight text-[#0a0a0a]"
+            >
+              Life AdminOS
+            </Link>
             <Link
               href="/login"
-              className="text-sm text-[#0a0a0a]/70 hover:text-[#0a0a0a] transition-colors px-3 py-1.5"
+              className="[grid-column:10/13] justify-self-end text-sm text-[#0a0a0a]/70 hover:text-[#0a0a0a] transition-colors px-3 py-1.5"
             >
               Sign in
             </Link>
           </div>
         </nav>
+
+        {/* Bottom-left utility strip — kicker line + slow scroll cue.
+            Hidden below `md` to avoid crowding the shorter/narrower crop of
+            the hero photo on mobile (see docs/superpowers/specs — mobile
+            hero composition is still TBD); nav remains visible at all
+            widths. */}
+        <div className="landing-hero-utility opacity-0 hidden md:block absolute bottom-10 lg:bottom-12 inset-x-0 z-20 pointer-events-none">
+          <div className="landing-hero-grid">
+            <div className="[grid-column:1/4] flex flex-col items-start gap-3 pointer-events-auto">
+              <span className="block text-[13px] uppercase tracking-[0.08em] text-[#0a0a0a]/60 font-medium">
+                Your personal operations system
+              </span>
+              <div className="relative w-px h-9 bg-[#0a0a0a]/20 overflow-hidden" aria-hidden="true">
+                <span className="landing-hero-scroll-dot absolute left-1/2 top-0 -translate-x-1/2 w-1 h-1 rounded-full bg-[#0a0a0a]/60" />
+              </div>
+              <span className="block text-[11px] uppercase tracking-[0.08em] text-[#0a0a0a]/60">
+                Scroll
+              </span>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* Phase 2+ placeholder — back to the cream palette */}

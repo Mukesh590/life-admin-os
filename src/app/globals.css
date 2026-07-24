@@ -346,3 +346,36 @@ body::after {
   background: linear-gradient(155deg, #2a1c14 0%, #17110c 100%);
   border: 1px solid rgba(255,255,255,0.07);
 }
+
+/* Landing hero — shared nav / utility-strip grid.
+   One 12-column definition reused by both rows so the wordmark, Sign in,
+   and utility-strip anchor points share a single source of truth instead
+   of independent arbitrary offsets. */
+.landing-hero-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(12px, 2vw, 24px);
+  padding-left: clamp(20px, 5vw, 80px);
+  padding-right: clamp(20px, 5vw, 80px);
+}
+
+/* Scroll-cue dot — travels once down the ~36px line on a slow loop.
+   transform/opacity only, per the landing page's animation rules. */
+.landing-hero-scroll-dot {
+  animation: landing-scroll-dot 9s ease-in-out infinite;
+}
+
+@keyframes landing-scroll-dot {
+  0% { transform: translateY(0); opacity: 0; }
+  10% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { transform: translateY(36px); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-hero-scroll-dot {
+    animation: none;
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
