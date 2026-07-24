@@ -1,87 +1,54 @@
 # Handoff Status
 
-**Objective**: Complete the entire Life AdminOS public landing page in the
-locked section order (hero → scroll-dive → stats → marquee → annotated
-dashboard replica → three product videos → founder → closing CTA → footer
-curtain), per Mukesh's explicit instruction to build the full page in one
-pass rather than phase-by-phase with verification between each phase (a
-deliberate, explicit override of `LANDING-RESEARCH-FINAL.md` Section 18's
-default phase-by-phase cadence — see note below).
+**Objective**: Release verification for the combined Life AdminOS landing
+experience and authenticated productivity system.
 
-**Active writer**: none — awaiting Mukesh browser verification
+**Landing source commit**: `8d863a0`
 
-**Branch**: `build/landing-complete` (created from `landing/hero-recovery` @
-`01992d9`)
+**Dashboard source commit**:
+`1f1e1ce0a2963b89bac9e816b31b2486d7af0f9b`
 
-**Starting SHA**: `01992d9049141947ffe87bc4da86a2d560c151d5`
+**Integrated landing cherry-pick**:
+`1eb0d3e80309e8215b877c3a80ac241fffd13783`
 
-## Files changed (this pass)
+**Integration branch**: `build/life-adminos-full-preview`
 
-**Modified**: `src/app/globals.css` (landing color tokens + Bricolage/Inter
-font scoping under `.landing-root`, focus-visible outlines, utility-strip
-short-viewport hide, stats/marquee/dashboard-replica/footer-curtain CSS),
-`src/app/layout.tsx` (added Bricolage Grotesque + Inter as landing-only
-font variables alongside the existing Syne/DM Sans/JetBrains Mono),
-`src/app/page.tsx` (rebuilt as the composition layer for all 9 sections),
-`src/components/AppShell.tsx` (Lenis now conditionally excluded on the
-landing route only — dashboard behavior unchanged).
+**Migration**:
+`supabase/migrations/20260724050000_life_admin_productivity.sql` is
+committed and has not been applied.
 
-**Added** (`src/components/landing/`): `HeroDive.tsx`, `StatsBand.tsx`,
-`Marquee.tsx`, `DashboardReplica.tsx`, `VideoStories.tsx`,
-`FounderSection.tsx`, `ClosingCTA.tsx`, `FooterCurtain.tsx`.
+**Active writer**: Claude Code release process after this push
 
-**Added assets**: `public/dashboard-bg.jpg`, `public/founder-photo.jpg`,
-`public/document-capture-demo-clean.mp4`, `public/reminder-demo-clean.mp4`,
-`public/device-screen-demo-clean.mp4`, three new lightweight branded SVG
-video posters (`public/video-poster-*.svg`).
+## Integration status
 
-**Deliberately left untracked/unstaged**: the `.png` source duplicates
-(`dashboard-bg.png`, `founder-photo.png`) and the raw uncropped video
-recordings (`device-screen-demo.mp4`, `document-capture-demo.mp4`,
-`reminder-demo.mp4`) per CONTEXT-MASTER Section 11 / this task's explicit
-"never commit the raw larger videos" instruction. `motion-analysis-main.md`
-and `motion-reference-test-main.html` also left untouched — disposition
-still TBD per CONTEXT-MASTER Section 14.
+- Landing: all nine sections are present in the locked order.
+- Authenticated product: all 13 productivity features are present alongside
+  the existing auth and six CRUD systems.
+- Landing typography remains scoped to Bricolage Grotesque + Inter.
+- Dashboard typography remains Syne + DM Sans, with JetBrains Mono where
+  already used.
+- `globals.css` contains both the landing-only and dashboard-only additions.
+- The three tracked videos are the optimized `*-clean.mp4` assets. No raw
+  video recordings are tracked.
+- No tracked blob is 100 MiB or larger. The largest tracked blob is the
+  7.74 MiB device-screen demo.
+- No Supabase migration or production deployment was run during integration.
 
-## Lint / build results
+## Verification
 
-- `npm run lint`: passed. One pre-existing warning, unrelated to this work —
-  `@next/next/no-img-element` in
-  `src/app/(dashboard)/dashboard/DashboardClient.tsx:413`.
-- `npm run build`: succeeded (`✓ Compiled successfully`, all 19 routes
-  generated).
-- `git diff --check`: no whitespace errors (only harmless LF→CRLF
-  line-ending advisories on Windows).
-
-## Note on process deviation
-
-`LANDING-RESEARCH-FINAL.md` Section 18 specifies phase-by-phase
-implementation with Mukesh's browser verification between phases. This pass
-built all 9 locked sections in a single uncommitted-until-now pass per
-Mukesh's explicit direct instruction this session ("complete the entire
-landing page tonight"), which is the highest-authority source per the
-collaboration protocol (CONTEXT-MASTER Section 13) and therefore
-supersedes the phase-spec's default cadence for this pass specifically —
-flagged here for visibility, not silently absorbed into the phase spec
-itself.
-
-## What still needs Mukesh's real browser verification
-
-Every item in `LANDING-RESEARCH-FINAL.md` Section 19's QA checklist,
-especially: the scroll-dive's crossfade handoff (no flash/pop, correct
-alignment, correct fill timing at 60fps on a real machine), mobile hero/dive
-behavior (still using the same image crop as desktop — no separate
-mobile-composed asset exists yet), and the annotated dashboard replica's
-connector-line positions (approximate/decorative percentage coordinates,
-not verified against real rendered layout in-browser).
+- Focused tests: passed, 7 of 7.
+- `npm run lint`: passed with one pre-existing
+  `@next/next/no-img-element` warning in
+  `src/app/(dashboard)/dashboard/DashboardClient.tsx`.
+- `npm run build`: passed; all 20 generated routes compiled.
+- `git diff --check`: passed.
+- Required optimized videos and images: present.
+- API secret signature scan of tracked source: clear.
 
 ## Next action
 
-Codex full-preview integration and independent review (typography, motion
-grammar, accessibility, and the scroll-dive geometry math), then Mukesh's
-browser verification per the standing protocol.
+Production verification, migration push, master push.
 
-## Deployment status
+## Protected state
 
-Not deployed. Pushed to `origin/build/landing-complete` per this session's
-explicit instruction to push that branch (not `master`, not production).
+Master, production, and live Supabase remain unchanged.
