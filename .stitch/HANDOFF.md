@@ -1,44 +1,47 @@
 # Handoff Status
 
-**Objective**: Recover and continue the landing-page hero rebuild (Phase 1 —
-nav + scroll-dive hero) on an isolated branch: preserve the existing dirty
-WIP and research docs as a checkpoint, then implement the hero composition
-fixes (remove watermark, restore wordmark nav, add bottom-left utility strip
-with scroll cue, align nav/utility strip to a shared 12-column grid).
+**Objective**: Complete the entire Life AdminOS public landing page in the
+locked section order (hero → scroll-dive → stats → marquee → annotated
+dashboard replica → three product videos → founder → closing CTA → footer
+curtain), per Mukesh's explicit instruction to build the full page in one
+pass rather than phase-by-phase with verification between each phase (a
+deliberate, explicit override of `LANDING-RESEARCH-FINAL.md` Section 18's
+default phase-by-phase cadence — see note below).
 
 **Active writer**: none — awaiting Mukesh browser verification
 
-**Branch**: `landing/hero-recovery`
+**Branch**: `build/landing-complete` (created from `landing/hero-recovery` @
+`01992d9`)
 
-**Starting SHA**: `9d91c6f`
+**Starting SHA**: `01992d9049141947ffe87bc4da86a2d560c151d5`
 
-**Preservation-checkpoint SHA**: `6edfb462b015d947382ac5fea12677d5665d0ed9`
-("checkpoint: preserve landing hero WIP and research baseline")
+## Files changed (this pass)
 
-**Hero-implementation SHA**: `309ceef8140f391d1d6e46aa57ad416a55059ed9`
-("feat: refine landing hero composition")
+**Modified**: `src/app/globals.css` (landing color tokens + Bricolage/Inter
+font scoping under `.landing-root`, focus-visible outlines, utility-strip
+short-viewport hide, stats/marquee/dashboard-replica/footer-curtain CSS),
+`src/app/layout.tsx` (added Bricolage Grotesque + Inter as landing-only
+font variables alongside the existing Syne/DM Sans/JetBrains Mono),
+`src/app/page.tsx` (rebuilt as the composition layer for all 9 sections),
+`src/components/AppShell.tsx` (Lenis now conditionally excluded on the
+landing route only — dashboard behavior unchanged).
 
-## Files changed
+**Added** (`src/components/landing/`): `HeroDive.tsx`, `StatsBand.tsx`,
+`Marquee.tsx`, `DashboardReplica.tsx`, `VideoStories.tsx`,
+`FounderSection.tsx`, `ClosingCTA.tsx`, `FooterCurtain.tsx`.
 
-**Preservation checkpoint** (23 files):
-`.gitignore` (modified — added `/.playwright-mcp/` and
-`/.codex/config.toml`), `.stitch/CONTEXT-MASTER.md` (added),
-`.stitch/LANDING-RESEARCH-FINAL.md` (added),
-`docs/superpowers/specs/2026-07-23-landing-hero-phase1-design.md`
-(modified), `public/hero-full.jpg` (added), `src/app/globals.css`
-(modified), `src/app/page.tsx` (modified), `src/components/AppShell.tsx`
-(modified), `src/components/animations/HeroCanvas.tsx` (deleted), plus 14
-stale tracked `.playwright-mcp/` artifacts staged as deletions.
+**Added assets**: `public/dashboard-bg.jpg`, `public/founder-photo.jpg`,
+`public/document-capture-demo-clean.mp4`, `public/reminder-demo-clean.mp4`,
+`public/device-screen-demo-clean.mp4`, three new lightweight branded SVG
+video posters (`public/video-poster-*.svg`).
 
-**Hero implementation** (2 files):
-`src/app/globals.css` (added `.landing-hero-grid` shared 12-column
-definition and the `.landing-hero-scroll-dot` keyframe animation),
-`src/app/page.tsx` (removed the large floating watermark entirely; nav now
-renders a small "Life AdminOS" wordmark top-left + "Sign in" top-right on
-the shared grid; added a bottom-left utility strip — kicker line, 36px
-scroll line with a 9s-looping dot, "Scroll" label — hidden below `md`;
-updated the GSAP entrance/dive timelines to reference `.landing-hero-utility`
-in place of the removed `.hero-watermark`).
+**Deliberately left untracked/unstaged**: the `.png` source duplicates
+(`dashboard-bg.png`, `founder-photo.png`) and the raw uncropped video
+recordings (`device-screen-demo.mp4`, `document-capture-demo.mp4`,
+`reminder-demo.mp4`) per CONTEXT-MASTER Section 11 / this task's explicit
+"never commit the raw larger videos" instruction. `motion-analysis-main.md`
+and `motion-reference-test-main.html` also left untouched — disposition
+still TBD per CONTEXT-MASTER Section 14.
 
 ## Lint / build results
 
@@ -47,23 +50,38 @@ in place of the removed `.hero-watermark`).
   `src/app/(dashboard)/dashboard/DashboardClient.tsx:413`.
 - `npm run build`: succeeded (`✓ Compiled successfully`, all 19 routes
   generated).
+- `git diff --check`: no whitespace errors (only harmless LF→CRLF
+  line-ending advisories on Windows).
 
-## Known untracked asset/research files that remain
+## Note on process deviation
 
-Not part of either commit above; still untracked on this branch:
-`motion-analysis-main.md`, `motion-reference-test-main.html`,
-`public/dashboard-bg.jpg`, `public/dashboard-bg.png`,
-`public/device-screen-demo-clean.mp4`, `public/device-screen-demo.mp4`,
-`public/document-capture-demo-clean.mp4`,
-`public/document-capture-demo.mp4`, `public/founder-photo.jpg`,
-`public/founder-photo.png`, `public/reminder-demo-clean.mp4`,
-`public/reminder-demo.mp4`. Disposition of the two motion-reference files is
-still TBD per `.stitch/CONTEXT-MASTER.md` Section 14.
+`LANDING-RESEARCH-FINAL.md` Section 18 specifies phase-by-phase
+implementation with Mukesh's browser verification between phases. This pass
+built all 9 locked sections in a single uncommitted-until-now pass per
+Mukesh's explicit direct instruction this session ("complete the entire
+landing page tonight"), which is the highest-authority source per the
+collaboration protocol (CONTEXT-MASTER Section 13) and therefore
+supersedes the phase-spec's default cadence for this pass specifically —
+flagged here for visibility, not silently absorbed into the phase spec
+itself.
+
+## What still needs Mukesh's real browser verification
+
+Every item in `LANDING-RESEARCH-FINAL.md` Section 19's QA checklist,
+especially: the scroll-dive's crossfade handoff (no flash/pop, correct
+alignment, correct fill timing at 60fps on a real machine), mobile hero/dive
+behavior (still using the same image crop as desktop — no separate
+mobile-composed asset exists yet), and the annotated dashboard replica's
+connector-line positions (approximate/decorative percentage coordinates,
+not verified against real rendered layout in-browser).
 
 ## Next action
 
-Mukesh browser verification, then Codex review.
+Codex full-preview integration and independent review (typography, motion
+grammar, accessibility, and the scroll-dive geometry math), then Mukesh's
+browser verification per the standing protocol.
 
 ## Deployment status
 
-Not pushed, not deployed.
+Not deployed. Pushed to `origin/build/landing-complete` per this session's
+explicit instruction to push that branch (not `master`, not production).
