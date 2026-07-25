@@ -50,11 +50,11 @@ type Callout = {
 // (anchorX/anchorY). Approximate/decorative, per LANDING-RESEARCH-FINAL
 // Section 5's percentage-based coordinate system.
 const CALLOUTS: Callout[] = [
-  { n: 1, label: 'See what needs attention', x: 4, y: 10, anchorX: 27, anchorY: 22, side: 'left' },
-  { n: 2, label: 'Track recurring costs', x: 4, y: 46, anchorX: 30, anchorY: 52, side: 'left' },
-  { n: 3, label: 'Catch deadlines early', x: 96, y: 14, anchorX: 68, anchorY: 20, side: 'right' },
-  { n: 4, label: 'Keep documents close', x: 96, y: 52, anchorX: 70, anchorY: 56, side: 'right' },
-  { n: 5, label: 'Set one weekly focus', x: 50, y: 96, anchorX: 50, anchorY: 82, side: 'right' },
+  { n: 1, label: 'Know what needs attention', x: 4, y: 10, anchorX: 27, anchorY: 22, side: 'left' },
+  { n: 2, label: 'See your true monthly cost', x: 4, y: 46, anchorX: 30, anchorY: 52, side: 'left' },
+  { n: 3, label: 'Capture anything in seconds', x: 96, y: 14, anchorX: 68, anchorY: 20, side: 'right' },
+  { n: 4, label: 'Keep every document attached', x: 96, y: 52, anchorX: 70, anchorY: 56, side: 'right' },
+  { n: 5, label: 'Track what you keep postponing', x: 50, y: 96, anchorX: 50, anchorY: 82, side: 'right' },
 ]
 
 export function DashboardReplica() {
@@ -137,7 +137,7 @@ export function DashboardReplica() {
         <div
           className="relative rounded-[28px] overflow-hidden mx-auto max-w-[900px] p-4 sm:p-6"
           style={{
-            backgroundImage: "linear-gradient(155deg, rgba(20,14,10,0.94) 0%, rgba(10,8,6,0.97) 100%), url('/dashboard-bg.jpg')",
+            backgroundImage: "linear-gradient(155deg, rgba(20,14,10,0.72) 0%, rgba(10,8,6,0.85) 100%), url('/media/dashboard/dashboard-environment.png')",
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}

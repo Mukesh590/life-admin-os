@@ -476,13 +476,13 @@ body::after {
 .landing-page-content {
   position: relative;
   z-index: 1;
-  margin-bottom: var(--footer-height, clamp(300px, 38vw, 520px));
+  margin-bottom: var(--footer-height, clamp(420px, 44vw, 620px));
 }
 .landing-footer-curtain {
   position: fixed;
   z-index: 0;
   inset: auto 0 0;
-  height: var(--footer-height, clamp(300px, 38vw, 520px));
+  height: var(--footer-height, clamp(420px, 44vw, 620px));
   background: var(--accent);
 }
 @media (max-width: 580px), (max-height: 650px) {
@@ -492,6 +492,6 @@ body::after {
   .landing-footer-curtain {
     position: relative;
     height: auto;
-    min-height: 340px;
+    min-height: 480px;
   }
 }

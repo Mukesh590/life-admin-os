@@ -1,10 +1,17 @@
 import { HeroDive } from '@/components/landing/HeroDive'
-import { StatsBand } from '@/components/landing/StatsBand'
-import { Marquee } from '@/components/landing/Marquee'
-import { DashboardReplica } from '@/components/landing/DashboardReplica'
+import { ProblemSection } from '@/components/landing/ProblemSection'
+import { WhatIsSection } from '@/components/landing/WhatIsSection'
+import { NotJustTrackerSection } from '@/components/landing/NotJustTrackerSection'
+import { WidgetMosaicSection } from '@/components/landing/WidgetMosaicSection'
+import { SixPillars } from '@/components/landing/SixPillars'
+import { IntelligenceLayer } from '@/components/landing/IntelligenceLayer'
 import { VideoStories } from '@/components/landing/VideoStories'
-import { FounderSection } from '@/components/landing/FounderSection'
-import { ClosingCTA } from '@/components/landing/ClosingCTA'
+import { DashboardReplica } from '@/components/landing/DashboardReplica'
+import { EverythingYouNeed } from '@/components/landing/EverythingYouNeed'
+import { WhoItsFor } from '@/components/landing/WhoItsFor'
+import { ProofAndTrust } from '@/components/landing/ProofAndTrust'
+import { PriceSection } from '@/components/landing/PriceSection'
+import { FAQSection } from '@/components/landing/FAQSection'
 import { FooterCurtain } from '@/components/landing/FooterCurtain'
 
 export default function LandingPage() {
@@ -13,12 +20,19 @@ export default function LandingPage() {
       <HeroDive />
 
       <div className="landing-page-content">
-        <StatsBand />
-        <Marquee />
-        <DashboardReplica />
+        <ProblemSection />
+        <WhatIsSection />
+        <NotJustTrackerSection />
+        <WidgetMosaicSection />
+        <SixPillars />
+        <IntelligenceLayer />
         <VideoStories />
-        <FounderSection />
-        <ClosingCTA />
+        <DashboardReplica />
+        <EverythingYouNeed />
+        <WhoItsFor />
+        <ProofAndTrust />
+        <PriceSection />
+        <FAQSection />
       </div>
 
       <FooterCurtain />

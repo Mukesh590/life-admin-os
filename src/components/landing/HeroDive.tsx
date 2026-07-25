@@ -52,16 +52,16 @@ export function HeroDive() {
     () => {
       const mm = gsap.matchMedia()
 
-      mm.add(
-        {
-          isMobile: '(max-width: 767px)',
-          reduceMotion: '(prefers-reduced-motion: reduce)',
-        },
-        (context) => {
-          const { isMobile, reduceMotion } = context.conditions as {
-            isMobile: boolean
-            reduceMotion: boolean
-          }
+      // NOTE: gsap.matchMedia().add() with the multi-condition object form
+      // ({ name: query, ... }, callback) does not invoke its callback in
+      // this GSAP/bundler combination (verified: a plain single-query
+      // mm.add(query, cb) fires correctly, the object form silently never
+      // does). Using the single-query form and reading the two conditions
+      // directly via window.matchMedia avoids the broken code path while
+      // keeping GSAP's own revert-on-cleanup behavior via `mm`.
+      mm.add('all', () => {
+          const isMobile = window.matchMedia('(max-width: 767px)').matches
+          const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
           const wrapper = deviceWrapperRef.current
           const heroSection = heroSectionRef.current
@@ -195,7 +195,7 @@ export function HeroDive() {
   )
 
   return (
-    <div ref={containerRef} className="relative">
+    <div ref={containerRef} className="relative z-10">
       <section
         ref={heroSectionRef}
         className="relative left-1/2 w-[100dvw] -translate-x-1/2 h-[100dvh] overflow-clip bg-[#e9e7e2]"
