@@ -26,7 +26,7 @@ export function WarrantiesClient({ initialData, userId }: Props) {
 
   useEffect(() => {
     const title = searchParams.get('captureTitle')
-    if (!title) return
+    if (!title || searchParams.get('captureTarget') !== 'warranty') return
     setForm(current => ({
       ...current,
       product_name: title,

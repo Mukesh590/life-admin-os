@@ -16,7 +16,7 @@ const glass = 'bg-[#111118] border border-white/[0.06]'
 
 export function DocumentsClient({ initialData, userId }: Props) {
   const searchParams = useSearchParams()
-  const captureTitle = searchParams.get('captureTitle')
+  const captureTitle = searchParams.get('captureTarget') === 'document' ? searchParams.get('captureTitle') : null
   const [docs, setDocs] = useState<DocType[]>(initialData)
   const [uploading, setUploading] = useState(false)
   const [extracting, setExtracting] = useState(false)

@@ -34,7 +34,7 @@ export function SubscriptionsClient({ initialData, userId }: Props) {
 
   useEffect(() => {
     const title = searchParams.get('captureTitle')
-    if (!title) return
+    if (!title || searchParams.get('captureTarget') !== 'subscription') return
     setForm(current => ({
       ...current,
       name: title,

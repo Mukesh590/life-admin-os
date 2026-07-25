@@ -1,14 +1,7 @@
-import { createClient } from '@/lib/supabase/server'
-import { WarrantiesClient } from './WarrantiesClient'
+import { redirect } from 'next/navigation'
 
-export default async function WarrantiesPage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  const { data: warranties } = await supabase
-    .from('warranties')
-    .select('*')
-    .eq('user_id', user!.id)
-    .order('expiry_date')
-
-  return <WarrantiesClient initialData={warranties || []} userId={user!.id} />
+// The dashboard is now one continuous scrolling page (redesign v2). This
+// route is kept only so the existing direct URL still works.
+export default function WarrantiesPage() {
+  redirect('/dashboard#warranties')
 }

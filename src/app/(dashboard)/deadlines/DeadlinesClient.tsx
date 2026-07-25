@@ -43,7 +43,7 @@ export function DeadlinesClient({ initialData, initialActivityEvents, featureSto
 
   useEffect(() => {
     const title = searchParams.get('captureTitle')
-    if (!title) return
+    if (!title || searchParams.get('captureTarget') !== 'deadline') return
     setForm(current => ({
       ...current,
       title,

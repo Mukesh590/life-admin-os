@@ -1,14 +1,7 @@
-import { createClient } from '@/lib/supabase/server'
-import { SettingsClient } from './SettingsClient'
+import { redirect } from 'next/navigation'
 
-export default async function SettingsPage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  const { data: profile } = await supabase
-    .from('users_profile')
-    .select('*')
-    .eq('id', user!.id)
-    .single()
-
-  return <SettingsClient user={user!} profile={profile} />
+// The dashboard is now one continuous scrolling page (redesign v2). This
+// route is kept only so the existing direct URL still works.
+export default function SettingsPage() {
+  redirect('/dashboard#settings')
 }

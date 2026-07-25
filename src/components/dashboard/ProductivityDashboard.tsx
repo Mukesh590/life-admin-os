@@ -519,20 +519,24 @@ export function ProductivityDashboard({
     'entertainment',
     'other',
   ])).filter(Boolean).sort()
-  const routeForTarget: Record<InboxTarget, string> = {
-    deadline: '/deadlines',
-    bill: '/bills',
-    document: '/documents',
-    subscription: '/subscriptions',
-    appointment: '/appointments',
-    warranty: '/warranties',
+  // All entities now live as sections on one page (redesign v2), so a
+  // capture link needs the target entity in the query string (multiple
+  // section forms are mounted at once — captureTarget is how each one knows
+  // whether this capture is meant for it) plus the section's anchor hash.
+  const sectionForTarget: Record<InboxTarget, string> = {
+    deadline: 'deadlines',
+    bill: 'bills',
+    document: 'documents',
+    subscription: 'subscriptions',
+    appointment: 'appointments',
+    warranty: 'warranties',
   }
 
   function captureHref(item: QuickInboxItem, target: InboxTarget) {
-    const params = new URLSearchParams({ captureTitle: item.title })
+    const params = new URLSearchParams({ captureTitle: item.title, captureTarget: target })
     if (item.note) params.set('captureNote', item.note)
     if (item.due_date) params.set('captureDue', item.due_date)
-    return `${routeForTarget[target]}?${params.toString()}`
+    return `/dashboard?${params.toString()}#${sectionForTarget[target]}`
   }
 
   return (
@@ -836,7 +840,7 @@ export function ProductivityDashboard({
                     className={`${field} min-w-[150px]`}
                     aria-label={`Workflow for ${item.title}`}
                   >
-                    {(Object.keys(routeForTarget) as InboxTarget[]).map(value => <option key={value} value={value} className="bg-[#15121a] capitalize">{value}</option>)}
+                    {(Object.keys(sectionForTarget) as InboxTarget[]).map(value => <option key={value} value={value} className="bg-[#15121a] capitalize">{value}</option>)}
                   </select>
                   <Link href={captureHref(item, target)} className={orangeButton}>Open {target}</Link>
                   <button onClick={() => processInboxItem(item)} className={quietButton} disabled={busy === `process:${item.id}`}>

@@ -34,7 +34,7 @@ export function BillsClient({ initialData, initialActivityEvents, userId }: Prop
 
   useEffect(() => {
     const title = searchParams.get('captureTitle')
-    if (!title) return
+    if (!title || searchParams.get('captureTarget') !== 'bill') return
     setForm(current => ({
       ...current,
       name: title,

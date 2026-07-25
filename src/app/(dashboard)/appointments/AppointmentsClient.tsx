@@ -27,7 +27,7 @@ export function AppointmentsClient({ initialData, userId }: Props) {
 
   useEffect(() => {
     const title = searchParams.get('captureTitle')
-    if (!title) return
+    if (!title || searchParams.get('captureTarget') !== 'appointment') return
     setForm(current => ({
       ...current,
       title,

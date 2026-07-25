@@ -311,17 +311,12 @@ body::after {
     #07070e;
 }
 
-/* Warm ambient placeholder — /dashboard page background only.
-   Swap for a real photo later via one inline `backgroundImage` on this element. */
+/* Warm interior environment — authenticated dashboard background (redesign
+   v2). Real supplied photo, not the earlier gradient placeholder. */
 .dashboard-warm-bg {
   background:
-    linear-gradient(rgba(10, 7, 6, 0.72), rgba(10, 7, 6, 0.88)),
-    radial-gradient(ellipse 55% 45% at 15% 15%, rgba(226,121,61,0.22) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 40% at 90% 10%, rgba(180,90,40,0.16) 0%, transparent 55%),
-    radial-gradient(ellipse 60% 55% at 50% 105%, rgba(120,60,30,0.20) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 35% at 100% 60%, rgba(226,121,61,0.10) 0%, transparent 60%),
-    url('/dashboard-bg.jpg'),
-    #0e0a08;
+    linear-gradient(rgba(10, 7, 6, 0.60), rgba(10, 7, 6, 0.78)),
+    url('/media/dashboard/dashboard-environment.png');
   background-size: cover;
   background-position: center;
   background-attachment: local;
