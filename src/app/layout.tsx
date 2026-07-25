@@ -59,6 +59,12 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <body className={`${syne.variable} ${dmSans.variable} ${jetbrainsMono.variable} ${bricolage.variable} ${inter.variable} font-sans antialiased bg-[#04040a] text-[#e8e8f0]`}>
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[999] focus:px-4 focus:py-2 focus:rounded-lg focus:bg-white focus:text-black focus:text-sm focus:font-semibold focus:outline focus:outline-2 focus:outline-offset-2"
+        >
+          Skip to content
+        </a>
         <AppShell>
           {children}
         </AppShell>

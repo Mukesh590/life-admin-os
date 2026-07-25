@@ -96,7 +96,7 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
             </div>
 
             {/* Form side */}
-            <div className="px-6 py-8 sm:px-10 sm:py-12 flex items-center">
+            <div id="main-content" className="px-6 py-8 sm:px-10 sm:py-12 flex items-center">
               <div className="w-full">
                 <AnimatePresence mode="wait" initial={false}>
                   <motion.div

@@ -30,7 +30,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
       <Sidebar />
 
-      <main className="pt-14 pb-20 lg:pt-6 lg:pb-6 lg:pl-24">
+      <main id="main-content" className="pt-14 pb-20 lg:pt-6 lg:pb-6 lg:pl-24">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           {children}
         </div>

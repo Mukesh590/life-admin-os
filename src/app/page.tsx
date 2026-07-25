@@ -16,7 +16,7 @@ import { FooterCurtain } from '@/components/landing/FooterCurtain'
 
 export default function LandingPage() {
   return (
-    <div className="landing-root min-h-[100dvh] bg-[var(--canvas)] overflow-x-hidden">
+    <div id="main-content" className="landing-root min-h-[100dvh] bg-[var(--canvas)] overflow-x-hidden">
       <HeroDive />
 
       <div className="landing-page-content">
