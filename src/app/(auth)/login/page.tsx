@@ -32,15 +32,19 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="w-full max-w-sm">
-      <div className="text-center mb-8">
-        <h1 className="text-2xl font-bold text-white mb-2">Welcome back</h1>
-        <p className="text-slate-400 text-sm">Sign in to your Life Admin OS</p>
+    <div className="w-full max-w-sm mx-auto">
+      <div className="mb-8">
+        <h1 className="font-landing-display font-bold text-[clamp(24px,3vw,32px)] leading-[1.05] tracking-tight text-[var(--ink)] mb-2">
+          Welcome back.
+          <br />
+          Your life is waiting.
+        </h1>
+        <p className="text-[var(--ink)]/60 text-sm">Sign in to your Life AdminOS.</p>
       </div>
 
       <form onSubmit={handleLogin} className="space-y-4">
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-1.5">
+          <label htmlFor="email" className="block text-sm font-medium text-[var(--ink)]/80 mb-1.5">
             Email
           </label>
           <input
@@ -51,12 +55,12 @@ export default function LoginPage() {
             required
             autoComplete="email"
             placeholder="you@example.com"
-            className="w-full px-4 py-2.5 rounded-lg bg-[#161b2e] border border-white/[0.08] text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all text-sm"
+            className="w-full px-4 py-2.5 rounded-lg bg-white border border-[var(--line)] text-[var(--ink)] placeholder-[var(--ink)]/35 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/40 focus:border-[var(--accent)]/60 transition-all text-sm"
           />
         </div>
 
         <div>
-          <label htmlFor="password" className="block text-sm font-medium text-slate-300 mb-1.5">
+          <label htmlFor="password" className="block text-sm font-medium text-[var(--ink)]/80 mb-1.5">
             Password
           </label>
           <div className="relative">
@@ -68,26 +72,26 @@ export default function LoginPage() {
               required
               autoComplete="current-password"
               placeholder="Your password"
-              className="w-full px-4 py-2.5 pr-10 rounded-lg bg-[#161b2e] border border-white/[0.08] text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all text-sm"
+              className="w-full px-4 py-2.5 pr-10 rounded-lg bg-white border border-[var(--line)] text-[var(--ink)] placeholder-[var(--ink)]/35 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/40 focus:border-[var(--accent)]/60 transition-all text-sm"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--ink)]/45 hover:text-[var(--ink)] transition-colors"
               aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
               {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
           </div>
           <div className="text-right mt-1.5">
-            <Link href="/reset-password" className="text-xs text-indigo-400 hover:text-indigo-300 transition-colors">
+            <Link href="/reset-password" className="text-xs text-[var(--ink)]/60 hover:text-[var(--ink)] transition-colors">
               Forgot password?
             </Link>
           </div>
         </div>
 
         {error && (
-          <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm" role="alert">
+          <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm" role="alert">
             {error}
           </div>
         )}
@@ -95,7 +99,7 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-400 disabled:opacity-60 disabled:cursor-not-allowed text-white py-2.5 rounded-lg font-semibold transition-all text-sm"
+          className="w-full flex items-center justify-center gap-2 bg-[var(--accent)] hover:bg-[var(--accent)]/90 disabled:opacity-60 disabled:cursor-not-allowed text-white py-2.5 rounded-full font-semibold transition-all text-sm"
         >
           {loading ? (
             <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -106,9 +110,9 @@ export default function LoginPage() {
         </button>
       </form>
 
-      <p className="text-center mt-6 text-sm text-slate-400">
+      <p className="text-center mt-6 text-sm text-[var(--ink)]/60">
         No account?{' '}
-        <Link href="/signup" className="text-indigo-400 hover:text-indigo-300 font-medium transition-colors">
+        <Link href="/signup" className="text-[var(--ink)] font-medium hover:text-[var(--accent)] transition-colors">
           Create one free
         </Link>
       </p>

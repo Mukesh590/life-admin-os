@@ -31,15 +31,15 @@ export default function ResetPasswordPage() {
 
   if (success) {
     return (
-      <div className="w-full max-w-sm text-center">
-        <div className="w-14 h-14 rounded-full bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center mx-auto mb-6">
-          <CheckCircle2 className="w-7 h-7 text-emerald-400" />
+      <div className="w-full max-w-sm mx-auto text-center">
+        <div className="w-14 h-14 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center mx-auto mb-6">
+          <CheckCircle2 className="w-7 h-7 text-emerald-600" />
         </div>
-        <h2 className="text-xl font-bold text-white mb-2">Check your email</h2>
-        <p className="text-slate-400 text-sm mb-6">
-          We sent a password reset link to <strong className="text-slate-200">{email}</strong>.
+        <h2 className="font-landing-display font-bold text-xl text-[var(--ink)] mb-2">Check your email</h2>
+        <p className="text-[var(--ink)]/60 text-sm mb-6">
+          We sent a password reset link to <strong className="text-[var(--ink)]">{email}</strong>.
         </p>
-        <Link href="/login" className="text-indigo-400 hover:text-indigo-300 text-sm font-medium">
+        <Link href="/login" className="text-[var(--ink)] hover:text-[var(--accent)] text-sm font-medium transition-colors">
           Back to sign in
         </Link>
       </div>
@@ -47,15 +47,17 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <div className="w-full max-w-sm">
-      <div className="text-center mb-8">
-        <h1 className="text-2xl font-bold text-white mb-2">Reset your password</h1>
-        <p className="text-slate-400 text-sm">Enter your email and we&apos;ll send a reset link.</p>
+    <div className="w-full max-w-sm mx-auto">
+      <div className="mb-8">
+        <h1 className="font-landing-display font-bold text-[clamp(24px,3vw,32px)] leading-[1.05] tracking-tight text-[var(--ink)] mb-2">
+          Reset your password
+        </h1>
+        <p className="text-[var(--ink)]/60 text-sm">Enter your email and we&apos;ll send a reset link.</p>
       </div>
 
       <form onSubmit={handleReset} className="space-y-4">
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-1.5">
+          <label htmlFor="email" className="block text-sm font-medium text-[var(--ink)]/80 mb-1.5">
             Email
           </label>
           <input
@@ -66,12 +68,12 @@ export default function ResetPasswordPage() {
             required
             autoComplete="email"
             placeholder="you@example.com"
-            className="w-full px-4 py-2.5 rounded-lg bg-[#161b2e] border border-white/[0.08] text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all text-sm"
+            className="w-full px-4 py-2.5 rounded-lg bg-white border border-[var(--line)] text-[var(--ink)] placeholder-[var(--ink)]/35 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/40 focus:border-[var(--accent)]/60 transition-all text-sm"
           />
         </div>
 
         {error && (
-          <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm" role="alert">
+          <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm" role="alert">
             {error}
           </div>
         )}
@@ -79,7 +81,7 @@ export default function ResetPasswordPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-400 disabled:opacity-60 disabled:cursor-not-allowed text-white py-2.5 rounded-lg font-semibold transition-all text-sm"
+          className="w-full flex items-center justify-center gap-2 bg-[var(--accent)] hover:bg-[var(--accent)]/90 disabled:opacity-60 disabled:cursor-not-allowed text-white py-2.5 rounded-full font-semibold transition-all text-sm"
         >
           {loading ? (
             <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -90,9 +92,9 @@ export default function ResetPasswordPage() {
         </button>
       </form>
 
-      <p className="text-center mt-6 text-sm text-slate-400">
+      <p className="text-center mt-6 text-sm text-[var(--ink)]/60">
         Remembered it?{' '}
-        <Link href="/login" className="text-indigo-400 hover:text-indigo-300 font-medium">
+        <Link href="/login" className="text-[var(--ink)] font-medium hover:text-[var(--accent)] transition-colors">
           Sign in
         </Link>
       </p>
