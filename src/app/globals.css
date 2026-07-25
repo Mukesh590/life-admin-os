@@ -101,24 +101,8 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  @media (pointer: fine) {
-    html, body, a, button {
-      cursor: none !important;
-    }
-  }
-
-  @media (pointer: coarse) {
-    .custom-cursor {
-      display: none !important;
-    }
-  }
-
-  /* Landing page ('/') keeps the default system cursor — it does not mount
-     CustomCursor, so this overrides the global `cursor: none` rule above. */
-  .landing-root,
-  .landing-root a,
-  .landing-root button {
-    cursor: auto !important;
+  a, button {
+    cursor: pointer;
   }
 
   ::-webkit-scrollbar {
